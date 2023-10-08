@@ -1,6 +1,6 @@
 ![](img/screen.png)
 
-[Visit Page](https://preiter93.github.io/time-tracker-svelte)
+[Time Tracker](https://preiter93.github.io/time-tracker-svelte)
 
 ## What is TimeTracker?
 
