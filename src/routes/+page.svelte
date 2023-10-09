@@ -2,6 +2,7 @@
 	import TimerItem from "$lib/components/TimerItem.svelte";
 	import { TimerCookie } from "$lib/cookies.js";
 	import { CreateButton } from "$lib/components/buttons";
+	import { slide } from "svelte/transition";
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -83,7 +84,7 @@
 <div>
 	<hr class="divider" />
 	{#each timerItems as item (item.id)}
-		<div class="timer-item">
+		<div class="timer-item" transition:slide>
 			<TimerItem
 				name={item.name}
 				duration={item.duration}
@@ -115,7 +116,7 @@
 	.timer-item {
 		color: black;
 		background-color: #fff;
-		padding: 1px 5px 1px 5px;
+		padding: 1px 0px 1px 0px;
 	}
 	h1 {
 		text-align: center;

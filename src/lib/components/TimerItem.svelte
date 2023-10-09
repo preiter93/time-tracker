@@ -1,6 +1,5 @@
 <script>
 	import { onDestroy, onMount } from "svelte";
-	import { slide } from "svelte/transition";
 	import { ControlButton } from "$lib/components/buttons";
 
 	/**
@@ -8,6 +7,29 @@
 	 * The display name.
 	 */
 	export let name;
+
+	/**
+	 * @type {number}
+	 * The duration offset in sec.
+	 */
+	export let offsetDuration = 0;
+
+	/**
+	 * @type {number}
+	 * The duration in sec.
+j	 */
+	export let duration = 0;
+
+	/**
+	 * @type {boolean}
+	 */
+	export let isRunning = false;
+
+	/**
+	 * @type {boolean}
+	 * Request focus of the input form.
+	 */
+	export let requestFocus = false;
 
 	/**
 	 * @type {function():Promise<void>}
@@ -38,29 +60,6 @@
 	 * Callback invoked on changed.
 	 */
 	export let onChanged;
-
-	/**
-	 * @type {number}
-	 * The duration offset in sec.
-	 */
-	export let offsetDuration = 0;
-
-	/**
-	 * @type {number}
-	 * The duration in sec.
-j	 */
-	export let duration = 0;
-
-	/**
-	 * @type {boolean}
-	 */
-	export let isRunning = false;
-
-	/**
-	 * @type {boolean}
-	 * Request focus of the input form.
-	 */
-	export let requestFocus = false;
 
 	/**
 	 * @type {number | null} timer
@@ -125,6 +124,7 @@ j	 */
 		const s = Math.floor(seconds % 60);
 		return `${fmt(h)}:${fmt(m)}:${fmt(s)}`;
 	}
+
 	/**
 	 * Focuses the input form when an item is created
 	 * @param {HTMLElement} node
@@ -164,11 +164,11 @@ j	 */
 	}
 </script>
 
-<div class="timer-item" transition:slide>
-	<form on:submit={(e) => e.preventDefault()} id="nameForm">
+<div class="outer">
+	<form on:submit={(e) => e.preventDefault()} id="timerName">
 		<input
-			class="timer-name"
-			name="input-name"
+			class="name"
+			name="timerName"
 			type="text"
 			on:blur={() => onChanged(name)}
 			bind:value={name}
@@ -177,7 +177,7 @@ j	 */
 		/>
 	</form>
 	<div class="row">
-		<p class="timer-time">
+		<p class="time">
 			{formatDuration(duration + offsetDuration)}
 		</p>
 		<ControlButton
@@ -199,24 +199,25 @@ j	 */
 			symbol={"cancel"}
 			--background-color="#fff"
 			--color="#000"
+			--margin="0 5px 0 0"
 		/>
 	</div>
 </div>
 
 <style>
-	.timer-item {
-		padding: 0px;
+	.outer {
 		margin: 10px 0;
+		padding: 0px;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 	}
-	.timer-time {
+	.time {
 		font-size: 20px;
 		margin: 0 20px 0 0;
 		width: 64px;
 	}
-	.timer-name {
+	.name {
 		font-size: 20px;
 		border: none;
 		color: #333;
