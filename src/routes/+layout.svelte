@@ -11,23 +11,35 @@
 </svelte:head>
 
 <style>
-	:global(:root) {
-		--bg-primary: red;
-		--bg-secondary: green;
-		--bg-header: #1f7a8c;
-		--text-primary: blue;
-		--text-header: yellow;
-		--btn-primary: blue;
-		--btn-secondary: purple;
-		--btn-action: #e5383b;
-	}
 	:global(body) {
-		color: var(--bg-primary);
-		background-color: var(--bg-secondary);
+		background-color: var(--bg-primary);
 		margin: 0;
 		padding: 0;
 	}
+
 	:global(p, input[type="text"]) {
 		color: var(--text-primary);
+	}
+
+	:global(.light) {
+		--bg-header: #1f7a8c;
+		--text-header: #fff;
+		--bg-primary: #fff;
+		--bg-secondary: #000;
+		--text-primary: #000;
+		--btn-primary: #000;
+		--btn-secondary: #fff;
+		--btn-action: #e5383b;
+	}
+
+	:global(.dark) {
+		--bg-header: #000;
+		--text-header: #913175;
+		--bg-primary: #20262e;
+		--bg-secondary: #913175;
+		--text-primary: #e9e8e8;
+		--btn-primary: #e9e8e8;
+		--btn-secondary: #913175;
+		--btn-action: #e9e8e8;
 	}
 </style>
