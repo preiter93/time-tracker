@@ -17,7 +17,7 @@ export class TimerCookie {
 		/** @type {TimerItem[]} */
 		let items = getItemsFromCookie();
 		let id = generateRandomID();
-		let newTimer = new TimerItem(id, "My Timer", 0, null);
+		let newTimer = new TimerItem(id, `Timer ${items.length + 1}`, 0, null);
 		items.push(newTimer);
 		setCookie(JSON.stringify(items));
 		return items.map(
