@@ -15,7 +15,7 @@
 	button {
 		border: none;
 		background: none;
-		width: 130px;
+		width: 150px;
 		height: 40px;
 		font-size: 1.2rem;
 		color: black;

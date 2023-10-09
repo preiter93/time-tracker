@@ -165,7 +165,7 @@ j	 */
 </script>
 
 <div class="outer">
-	<form on:submit={(e) => e.preventDefault()} id="timerName">
+	<div>
 		<input
 			class="name"
 			name="timerName"
@@ -175,7 +175,7 @@ j	 */
 			use:blurOnEnter
 			use:focusOnInit
 		/>
-	</form>
+	</div>
 	<div class="row">
 		<p class="time">
 			{formatDuration(duration + offsetDuration)}
