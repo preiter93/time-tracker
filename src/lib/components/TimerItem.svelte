@@ -214,6 +214,7 @@ j	 */
 		background-color: transparent;
 		width: 95%;
 		max-width: 400px;
+		margin-left: 5px;
 	}
 	.row {
 		display: flex;
