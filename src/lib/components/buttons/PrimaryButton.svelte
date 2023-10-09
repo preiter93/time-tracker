@@ -39,9 +39,11 @@
 		justify-content: center;
 		display: flex;
 	}
-	button:hover {
-		cursor: pointer;
-		transform: scale(0.975);
-		box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+	@media (hover: hover) {
+		button:hover {
+			cursor: pointer;
+			transform: scale(0.975);
+			box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+		}
 	}
 </style>

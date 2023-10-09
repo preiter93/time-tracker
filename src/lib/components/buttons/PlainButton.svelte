@@ -9,9 +9,11 @@
 		font-size: 1.8rem;
 		color: black;
 	}
-	button:hover {
-		cursor: pointer;
-		transform: scale(0.975);
-		color: #1f7a8c;
+	@media (hover: hover) {
+		button:hover {
+			cursor: pointer;
+			transform: scale(0.975);
+			color: #1f7a8c;
+		}
 	}
 </style>
