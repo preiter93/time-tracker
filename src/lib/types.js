@@ -3,7 +3,7 @@
  */
 
 /**
- * @typedef {Object} TimerItemType
+ * @typedef {Object} TimerItem
  * @property {string} id
  * @property {string} name
  * @property {number} duration
@@ -11,11 +11,4 @@
  * @property {boolean} isRunning
  */
 
-/**
- * @typedef {Object} TimerItemResp
- * @property {number} id
- * @property {string} name
- * @property {number} duration
- * @property {string | Date | null} started_at
- */
 export const unused = {}

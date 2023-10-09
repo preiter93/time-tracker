@@ -13,7 +13,7 @@
 
 	/**
 	 * Tracking items
-	 * @type {import('$lib/types.js').TimerItemType[]}
+	 * @type {import('$lib/types.js').TimerItem[]}
 	 */
 	let timerItems = data.items.data;
 

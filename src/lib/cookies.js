@@ -4,8 +4,7 @@ export class TimerCookie {
 	constructor() { }
 
 	list() {
-		/** @type {TimerItem[]} */
-		let items = getItemsFromCookie();
+		let items = getTimerItemsFromCookie();
 		return items.map(
 			(timer) => {
 				return convertTimerItem(timer);
@@ -14,10 +13,9 @@ export class TimerCookie {
 	}
 
 	create() {
-		/** @type {TimerItem[]} */
-		let items = getItemsFromCookie();
+		let items = getTimerItemsFromCookie();
 		let id = generateRandomID();
-		let newTimer = new TimerItem(id, `Timer ${items.length + 1}`, 0, null);
+		let newTimer = new TimerItemCookie(id, `Timer ${items.length + 1}`, 0, null);
 		items.push(newTimer);
 		setCookie(JSON.stringify(items));
 		return items.map(
@@ -32,8 +30,7 @@ export class TimerCookie {
 	 * The timer id.
 	 */
 	delete(id) {
-		/** @type {TimerItem[]} */
-		let items = getItemsFromCookie();
+		let items = getTimerItemsFromCookie();
 		items = items.filter(item => item.id !== id);
 		setCookie(JSON.stringify(items));
 		return items.map(
@@ -48,7 +45,7 @@ export class TimerCookie {
 	 * The timer id.
 	 */
 	start(id) {
-		return updateItemInCookies(id, (item) => {
+		return updateTimerItemInCookies(id, (item) => {
 			item.started_at = new Date();
 			return item;
 		})
@@ -59,7 +56,7 @@ export class TimerCookie {
 	 * The timer id.
 	 */
 	pause(id) {
-		return updateItemInCookies(id, (item) => {
+		return updateTimerItemInCookies(id, (item) => {
 			if (item.started_at !== null) {
 				item.duration += (new Date().getTime() - new Date(item.started_at).getTime()) / 1000;
 			}
@@ -73,7 +70,7 @@ export class TimerCookie {
 	 * The timer id.
 	 */
 	reset(id) {
-		return updateItemInCookies(id, (item) => {
+		return updateTimerItemInCookies(id, (item) => {
 			item.started_at = null;
 			item.duration = 0;
 			return item;
@@ -85,7 +82,7 @@ export class TimerCookie {
 	 * @param {string} name
 	 */
 	updateName(id, name) {
-		return updateItemInCookies(id, (item) => {
+		return updateTimerItemInCookies(id, (item) => {
 			item.name = name;
 			return item;
 		})
@@ -94,7 +91,10 @@ export class TimerCookie {
 
 }
 
-function getItemsFromCookie() {
+/**
+ * @returns {TimerItemCookie[]}
+ */
+function getTimerItemsFromCookie() {
 	const cookieValue = getCookie();
 	if (cookieValue !== null) {
 		const timerListJson = cookieValue.split('=')[1];
@@ -105,27 +105,16 @@ function getItemsFromCookie() {
 
 /**
  * @param {string} id
- * @param {TimerItem[]} items
+ * @param {function(TimerItemCookie): TimerItemCookie} cb
+ * @returns {import('$lib/types.js').TimerItem[]|null}
  */
-function findItemInCookies(id, items) {
+function updateTimerItemInCookies(id, cb) {
+	/** @type {TimerItemCookie[]} */
+	let items = getTimerItemsFromCookie();
 	const index = items.findIndex(
 		(item) => item.id === id
 	);
 	if (index !== -1) {
-		return index;
-	}
-	return null;
-}
-
-/**
- * @param {string} id
- * @param {function(TimerItem): TimerItem} cb
- */
-function updateItemInCookies(id, cb) {
-	/** @type {TimerItem[]} */
-	let items = getItemsFromCookie();
-	let index = findItemInCookies(id, items);
-	if (index !== null) {
 		items[index] = cb(items[index]);
 		setCookie(JSON.stringify(items));
 		return items.map(
@@ -152,7 +141,7 @@ function getCookie() {
 }
 
 
-class TimerItem {
+class TimerItemCookie {
 	/**
 	 * @param {string} id
 	 * @param {string} name
@@ -178,7 +167,8 @@ function generateRandomID() {
 }
 
 /**
- * @param {TimerItem} timer
+ * @param {TimerItemCookie} timer
+ * @returns {import('$lib/types.js').TimerItem}
  */
 function convertTimerItem(timer) {
 	const isRunning =
