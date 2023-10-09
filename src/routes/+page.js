@@ -1,8 +1,8 @@
-import { TimerCookie } from "$lib/cookies";
+import { TimerStore } from "$lib/store";
 
 /** @type {import('./$types').PageLoad} */
 export async function load() {
-	const data = new TimerCookie().list();
+	const data = new TimerStore().list();
 	return {
 		items: { data }
 	};

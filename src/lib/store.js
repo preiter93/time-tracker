@@ -1,10 +1,10 @@
-const cookieKey = 'items';
+const storeKey = 'items';
 
-export class TimerCookie {
+export class TimerStore {
 	constructor() { }
 
 	list() {
-		let items = getTimerItemsFromCookie();
+		let items = fetchTimerItemsFromStore();
 		return items.map(
 			(timer) => {
 				return convertTimerItem(timer);
@@ -13,11 +13,11 @@ export class TimerCookie {
 	}
 
 	create() {
-		let items = getTimerItemsFromCookie();
+		let items = fetchTimerItemsFromStore();
 		let id = generateRandomID();
-		let newTimer = new TimerItemCookie(id, `Timer ${items.length + 1}`, 0, null);
+		let newTimer = new TimerItemValue(id, `Timer ${items.length + 1}`, 0, null);
 		items.push(newTimer);
-		setCookie(JSON.stringify(items));
+		setItems(JSON.stringify(items));
 		return convertTimerItem(newTimer);
 	}
 
@@ -26,9 +26,9 @@ export class TimerCookie {
 	 * The timer id.
 	 */
 	delete(id) {
-		let items = getTimerItemsFromCookie();
+		let items = fetchTimerItemsFromStore();
 		items = items.filter(item => item.id !== id);
-		setCookie(JSON.stringify(items));
+		setItems(JSON.stringify(items));
 		return items.map(
 			(timer) => {
 				return convertTimerItem(timer);
@@ -41,7 +41,7 @@ export class TimerCookie {
 	 * The timer id.
 	 */
 	start(id) {
-		return updateTimerItemInCookies(id, (item) => {
+		return updateTimerItemInStore(id, (item) => {
 			item.started_at = new Date();
 			return item;
 		})
@@ -52,7 +52,7 @@ export class TimerCookie {
 	 * The timer id.
 	 */
 	pause(id) {
-		return updateTimerItemInCookies(id, (item) => {
+		return updateTimerItemInStore(id, (item) => {
 			if (item.started_at !== null) {
 				item.duration += (new Date().getTime() - new Date(item.started_at).getTime()) / 1000;
 			}
@@ -66,7 +66,7 @@ export class TimerCookie {
 	 * The timer id.
 	 */
 	reset(id) {
-		return updateTimerItemInCookies(id, (item) => {
+		return updateTimerItemInStore(id, (item) => {
 			item.started_at = null;
 			item.duration = 0;
 			return item;
@@ -78,7 +78,7 @@ export class TimerCookie {
 	 * @param {string} name
 	 */
 	updateName(id, name) {
-		return updateTimerItemInCookies(id, (item) => {
+		return updateTimerItemInStore(id, (item) => {
 			item.name = name;
 			return item;
 		})
@@ -88,31 +88,44 @@ export class TimerCookie {
 }
 
 /**
- * @returns {TimerItemCookie[]}
+ * Store the timer items in local storage
+ * @param {string} items
  */
-function getTimerItemsFromCookie() {
-	const cookieValue = getCookie();
-	if (cookieValue !== null) {
-		const timerListJson = cookieValue.split('=')[1];
-		return JSON.parse(timerListJson);
+function setItems(items) {
+	localStorage.setItem(storeKey, items);
+}
+
+/**
+ * Retrieve the timer items from local storage
+ */
+function getItems() {
+	return localStorage.getItem(storeKey);
+}
+
+/**
+ * @returns {TimerItemValue[]}
+ */
+function fetchTimerItemsFromStore() {
+	let items = getItems();
+	if (items !== null) {
+		return JSON.parse(items);
 	}
 	return [];
 }
 
 /**
  * @param {string} id
- * @param {function(TimerItemCookie): TimerItemCookie} cb
+ * @param {function(TimerItemValue): TimerItemValue} cb
  * @returns {import('$lib/types.js').TimerItem[]|null}
  */
-function updateTimerItemInCookies(id, cb) {
-	/** @type {TimerItemCookie[]} */
-	let items = getTimerItemsFromCookie();
+function updateTimerItemInStore(id, cb) {
+	let items = fetchTimerItemsFromStore();
 	const index = items.findIndex(
 		(item) => item.id === id
 	);
 	if (index !== -1) {
 		items[index] = cb(items[index]);
-		setCookie(JSON.stringify(items));
+		setItems(JSON.stringify(items));
 		return items.map(
 			(timer) => {
 				return convertTimerItem(timer);
@@ -121,23 +134,9 @@ function updateTimerItemInCookies(id, cb) {
 	}
 	return null;
 }
-/**
- * @param {string} value
- */
-function setCookie(value) {
-	document.cookie = cookieKey + "=" + value + ";";
-}
-
-function getCookie() {
-	const cookieValue = document.cookie.split('; ').find(row => row.startsWith(`${cookieKey}=`));
-	if (cookieValue) {
-		return cookieValue;
-	}
-	return null;
-}
 
 
-class TimerItemCookie {
+class TimerItemValue {
 	/**
 	 * @param {string} id
 	 * @param {string} name
@@ -155,7 +154,7 @@ class TimerItemCookie {
 function generateRandomID() {
 	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 	let result = '';
-	for (let i = 0; i < 4; i++) {
+	for (let i = 0; i < 8; i++) {
 		const randomIndex = Math.floor(Math.random() * characters.length);
 		result += characters.charAt(randomIndex);
 	}
@@ -163,7 +162,7 @@ function generateRandomID() {
 }
 
 /**
- * @param {TimerItemCookie} timer
+ * @param {TimerItemValue} timer
  * @returns {import('$lib/types.js').TimerItem}
  */
 function convertTimerItem(timer) {

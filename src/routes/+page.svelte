@@ -1,6 +1,6 @@
 <script>
 	import TimerItem from "$lib/components/TimerItem.svelte";
-	import { TimerCookie } from "$lib/cookies.js";
+	import { TimerStore } from "$lib/store.js";
 	import { CreateButton } from "$lib/components/buttons";
 	import { slide } from "svelte/transition";
 
@@ -8,9 +8,9 @@
 	export let data;
 
 	/**
-	 * The cookie fetcher class
+	 * The timer items store
 	 */
-	let cookie = new TimerCookie();
+	let store = new TimerStore();
 
 	/**
 	 * Tracking items
@@ -19,7 +19,7 @@
 	let timerItems = data.items.data;
 
 	async function onCreate() {
-		let newItem = cookie.create();
+		let newItem = store.create();
 		newItem.requestFocus = true;
 		timerItems = [...timerItems, newItem];
 	}
@@ -29,7 +29,7 @@
 	 * The timer id.
 	 */
 	async function onDelete(id) {
-		timerItems = cookie.delete(id);
+		timerItems = store.delete(id);
 	}
 
 	/**
@@ -37,7 +37,7 @@
 	 * The timer id.
 	 */
 	async function onStart(id) {
-		let updatedItems = cookie.start(id);
+		let updatedItems = store.start(id);
 		if (updatedItems !== null) {
 			timerItems = updatedItems;
 		}
@@ -48,7 +48,7 @@
 	 * The timer id.
 	 */
 	async function onPause(id) {
-		let updatedItems = cookie.pause(id);
+		let updatedItems = store.pause(id);
 		if (updatedItems !== null) {
 			timerItems = updatedItems;
 		}
@@ -59,7 +59,7 @@
 	 * The timer id.
 	 */
 	async function onReset(id) {
-		let updatedItems = cookie.reset(id);
+		let updatedItems = store.reset(id);
 		if (updatedItems !== null) {
 			timerItems = updatedItems;
 		}
@@ -71,7 +71,7 @@
 	 * The timer id.
 	 */
 	async function onChanged(id, name) {
-		let updatedItems = cookie.updateName(id, name);
+		let updatedItems = store.updateName(id, name);
 		if (updatedItems !== null) {
 			timerItems = updatedItems;
 		}
