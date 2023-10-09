@@ -1,8 +1,11 @@
 <script>
 	import TimerItem from "$lib/components/TimerItem.svelte";
 	import { TimerStore } from "$lib/store.js";
+	import { toggleThemeStorage } from "$lib/theme.js";
 	import { AddButton } from "$lib/components/buttons";
-	import { slide } from "svelte/transition";
+	import { fade, slide } from "svelte/transition";
+	import { onMount } from "svelte";
+	import { DarkIcon, LightIcon } from "$lib/components/icons";
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -76,10 +79,42 @@
 			timerItems = updatedItems;
 		}
 	}
+
+	/**
+	 * @type {string}
+	 */
+	let theme;
+
+	/**
+	 * Toggle the theme.
+	 */
+	function toggleTheme() {
+		let newTheme = toggleThemeStorage();
+		if (newTheme !== null) {
+			theme = newTheme;
+		}
+	}
+
+	/**
+	 * Set default theme to light.
+	 */
+	onMount(() => {
+		document.body.className = "dark";
+		theme = "dark";
+	});
 </script>
 
-<div class="div-title">
-	<h1>Time Tracker</h1>
+<div class="header">
+	<h1 class="title">Time Tracker</h1>
+	<button on:click={toggleTheme} class="theme-btn">
+		<div class="center" in:fade>
+			{#if theme === "dark"}
+				<LightIcon />
+			{:else}
+				<DarkIcon />
+			{/if}
+		</div>
+	</button>
 </div>
 <div>
 	<hr class="divider" />
@@ -106,19 +141,43 @@
 </div>
 
 <style>
-	.div-title {
-		color: white;
-		background-color: #1f7a8c;
+	.header {
+		color: var(--text-header);
+		background-color: var(--bg-header);
 		padding: 1px 5px 1px 5px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		width: 100%;
 	}
-	.timer-item {
-		color: black;
-		background-color: #fff;
-		padding: 1px 0px 1px 0px;
-	}
-	h1 {
+	.title {
 		text-align: center;
 		font-size: 38px;
+		flex: 1;
+	}
+	.theme-btn {
+		padding: 0;
+		height: 60px;
+		width: 60px;
+		margin-right: 20px;
+		border: none;
+		background: var(--bg-header);
+		color: var(--text-header);
+		border-radius: 2rem;
+	}
+	@media (hover: hover) {
+		.theme-btn:hover {
+			cursor: pointer;
+			transform: scale(0.85);
+		}
+	}
+	.center {
+		display: flex;
+		justify-content: center;
+	}
+	.timer-item {
+		background-color: var(--bg-primary);
+		padding: 1px 0px 1px 0px;
 	}
 	hr.divider {
 		border-width: 1px;
@@ -127,8 +186,8 @@
 		border: 0;
 		border-top: 1px solid #ccc;
 		display: block;
-		border-color: black;
-		background-color: black;
+		border-color: var(--bg-secondary);
+		background-color: var(--bg-secondary);
 	}
 	div.spacer {
 		margin-top: 10px;

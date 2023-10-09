@@ -183,23 +183,15 @@ j	 */
 		<ControlButton
 			on:click={isRunning ? pause : start}
 			symbol={isRunning ? "pause" : "play"}
-			--background-color={isRunning ? "#e5383b" : "#fff"}
-			--color={isRunning ? "#fff" : "#000"}
-			--margin="0 10px"
+			cls={isRunning ? "action" : "default"}
+			margin="0 10px"
 		/>
 		<ControlButton
 			on:click={reset}
 			symbol={"stop"}
-			--background-color="#fff"
-			--color="#000"
-			--margin="0 5px 0 0"
+			margin="0 5px 0 0"
 		/>
-		<CancelButton
-			on:click={remove}
-			--background-color="#fff"
-			--color="#000"
-			--margin="0 5px 0 0"
-		/>
+		<CancelButton on:click={remove} margin="0 5px 0 0" />
 	</div>
 </div>
 
@@ -219,7 +211,6 @@ j	 */
 	.name {
 		font-size: 20px;
 		border: none;
-		color: #333;
 		background-color: transparent;
 		width: 95%;
 		max-width: 400px;

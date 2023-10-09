@@ -1,8 +1,13 @@
 <script>
 	import { CancelIcon } from "$lib/components/icons";
+
+	/**
+	 * @type {string}
+	 */
+	export let margin = "0";
 </script>
 
-<button on:click class="cancel-button">
+<button on:click class="cancel-button" style="margin: {margin};">
 	<div class="center">
 		<CancelIcon />
 	</div></button
@@ -14,8 +19,6 @@
 		background: none;
 		width: 40px;
 		height: 40px;
-		color: black;
-		margin: var(--margin, "0 0");
 	}
 	@media (hover: hover) {
 		button:hover {
@@ -26,5 +29,6 @@
 	.center {
 		display: flex;
 		justify-content: center;
+		color: var(--btn-primary);
 	}
 </style>

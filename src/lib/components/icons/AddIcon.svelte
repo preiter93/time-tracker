@@ -4,7 +4,6 @@
 
 <svg
 	viewBox="0 0 32 32"
-	fill="white"
 	xmlns="http://www.w3.org/2000/svg"
 	width="{size}rem"
 	height="{size}rem"
@@ -16,7 +15,7 @@
 
 <style>
 	path {
+		fill: currentColor;
 		stroke: none;
-		fill: #000;
 	}
 </style>
