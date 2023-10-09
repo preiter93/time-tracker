@@ -1,12 +1,25 @@
 <script>
+	import PlayIcon from "$lib/components/buttons/play-icon.svelte";
+	import PauseIcon from "$lib/components/buttons/pause-icon.svelte";
+	import StopIcon from "$lib/components/buttons/stop-icon.svelte";
+	import CancelIcon from "$lib/components/buttons/cancel-icon.svelte";
+
 	/**
-	 * @type {string}
+	 * @type {any}
 	 */
 	export let symbol;
 </script>
 
 <button on:click>
-	{symbol}
+	{#if symbol === "play"}
+		<PlayIcon />
+	{:else if symbol === "pause"}
+		<PauseIcon />
+	{:else if symbol === "stop"}
+		<StopIcon />
+	{:else if symbol === "cancel"}
+		<CancelIcon />
+	{/if}
 </button>
 
 <style>
@@ -22,6 +35,9 @@
 		margin: var(--margin, "0 0");
 		box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2),
 			inset 0px -2px 3px rgba(0, 0, 0, 0.2);
+		align-items: center;
+		justify-content: center;
+		display: flex;
 	}
 	button:hover {
 		cursor: pointer;

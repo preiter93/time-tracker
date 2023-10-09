@@ -139,21 +139,21 @@ j	 */
 		</p>
 		<PrimaryButton
 			on:click={isRunning ? pause : start}
-			symbol={isRunning ? "⏸" : "⏵"}
+			symbol={isRunning ? "pause" : "play"}
 			--background-color={isRunning ? "#e5383b" : "#fff"}
 			--color={isRunning ? "#fff" : "#000"}
 			--margin="0 10px"
 		/>
 		<PrimaryButton
 			on:click={reset}
-			symbol={"⏹"}
+			symbol={"stop"}
 			--background-color="#fff"
 			--color="#000"
 			--margin="0 10px 0 0"
 		/>
 		<PrimaryButton
 			on:click={remove}
-			symbol={"✕"}
+			symbol={"cancel"}
 			--background-color="#fff"
 			--color="#000"
 		/>
