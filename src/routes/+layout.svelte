@@ -29,7 +29,7 @@
 		--text-primary: #000;
 		--btn-primary: #000;
 		--btn-secondary: #fff;
-		--btn-action: #e5383b;
+		--btn-action: #c30101;
 	}
 
 	:global(.dark) {

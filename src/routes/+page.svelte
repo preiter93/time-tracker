@@ -148,22 +148,22 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		width: 100%;
 	}
 	.title {
 		text-align: center;
-		font-size: 38px;
+		font-size: 34px;
 		flex: 1;
+		margin-left: 20px;
 	}
 	.theme-btn {
 		padding: 0;
-		height: 60px;
-		width: 60px;
-		margin-right: 20px;
+		height: 45px;
+		width: 45px;
 		border: none;
-		background: var(--bg-header);
-		color: var(--text-header);
+		background: var(--bg-primary);
+		color: var(--bg-secondary);
 		border-radius: 2rem;
+		margin-right: 10px;
 	}
 	@media (hover: hover) {
 		.theme-btn:hover {
