@@ -1,7 +1,7 @@
 <script>
 	import TimerItem from "$lib/components/TimerItem.svelte";
 	import { TimerStore } from "$lib/store.js";
-	import { CreateButton } from "$lib/components/buttons";
+	import { AddButton } from "$lib/components/buttons";
 	import { slide } from "svelte/transition";
 
 	/** @type {import('./$types').PageData} */
@@ -101,10 +101,8 @@
 		</div>
 		<hr class="divider" />
 	{/each}
-	<div class="row">
-		<CreateButton on:click={onCreate} />
-		<p>Add timer</p>
-	</div>
+	<div class="spacer" />
+	<AddButton on:click={onCreate} />
 </div>
 
 <style>
@@ -124,7 +122,7 @@
 	}
 	hr.divider {
 		border-width: 1px;
-		margin: 0em 0;
+		margin: 0 0;
 		height: 1px;
 		border: 0;
 		border-top: 1px solid #ccc;
@@ -132,10 +130,7 @@
 		border-color: black;
 		background-color: black;
 	}
-	.row {
+	div.spacer {
 		margin-top: 10px;
-		display: flex;
-		align-items: center;
-		text-align: center;
 	}
 </style>
