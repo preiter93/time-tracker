@@ -1,8 +1,10 @@
 <script>
-	import PlayIcon from "$lib/components/buttons/play-icon.svelte";
-	import PauseIcon from "$lib/components/buttons/pause-icon.svelte";
-	import StopIcon from "$lib/components/buttons/stop-icon.svelte";
-	import CancelIcon from "$lib/components/buttons/cancel-icon.svelte";
+	import {
+		PlayIcon,
+		PauseIcon,
+		StopIcon,
+		CancelIcon,
+	} from "$lib/components/icons";
 
 	/**
 	 * @type {any}
@@ -11,16 +13,18 @@
 </script>
 
 <button on:click>
-	{#if symbol === "play"}
-		<PlayIcon />
-	{:else if symbol === "pause"}
-		<PauseIcon />
-	{:else if symbol === "stop"}
-		<StopIcon />
-	{:else if symbol === "cancel"}
-		<CancelIcon />
-	{/if}
-</button>
+	<div class="center">
+		{#if symbol === "play"}
+			<PlayIcon />
+		{:else if symbol === "pause"}
+			<PauseIcon />
+		{:else if symbol === "stop"}
+			<StopIcon />
+		{:else if symbol === "cancel"}
+			<CancelIcon />
+		{/if}
+	</div></button
+>
 
 <style>
 	button {
@@ -45,5 +49,9 @@
 			transform: scale(0.975);
 			box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
 		}
+	}
+	.center {
+		display: flex;
+		justify-content: center;
 	}
 </style>

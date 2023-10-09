@@ -1,12 +1,13 @@
 <script>
-	export let size = "2.5";
+	export let size = "2.0";
 </script>
 
 <svg
 	viewBox="0 0 100 100"
 	fill="none"
 	xmlns="http://www.w3.org/2000/svg"
-	style="width: {size}rem; height: {size}rem;"
+	width="{size}rem"
+	height="{size}rem"
 	><path
 		d="M68.251,72.84H30.749c-2.258,0-4.089-1.831-4.089-4.089V31.249c0-2.258,1.831-4.089,4.089-4.089h37.502   c2.258,0,4.089,1.831,4.089,4.089v37.502C72.34,71.009,70.509,72.84,68.251,72.84z"
 	/><path
@@ -17,11 +18,6 @@
 >
 
 <style>
-	svg {
-		width: 2.5rem;
-		height: 2.5rem;
-		fill: none;
-	}
 	path {
 		fill: #000;
 		stroke: none;
