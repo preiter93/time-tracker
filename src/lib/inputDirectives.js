@@ -1,6 +1,6 @@
 /**
  * Blurs the node when Enter is pressed
- * @param {any} node
+   * @param {HTMLElement} node
  */
 export function blurOnEnter(node) {
 

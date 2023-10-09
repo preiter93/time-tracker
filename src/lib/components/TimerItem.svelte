@@ -120,6 +120,13 @@ j	 */
 		const s = Math.floor(seconds % 60);
 		return `${fmt(h)}:${fmt(m)}:${fmt(s)}`;
 	}
+	/**
+	 * Function called on init
+	 * @param {HTMLElement} node
+	 */
+	function init(node) {
+		node.focus();
+	}
 </script>
 
 <div class="timer-item" transition:slide>
@@ -130,6 +137,7 @@ j	 */
 			type="text"
 			bind:value={name}
 			use:blurOnEnter
+			use:init
 			name="input-name"
 		/>
 	</form>
