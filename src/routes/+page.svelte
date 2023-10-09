@@ -1,7 +1,7 @@
 <script>
 	import TimerItem from "$lib/components/TimerItem.svelte";
 	import { TimerCookie } from "$lib/cookies.js";
-	import { PlainButton } from "$lib/components/buttons";
+	import { CreateButton } from "$lib/components/buttons";
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -98,7 +98,7 @@
 		<hr class="divider" />
 	{/each}
 	<div class="row">
-		<PlainButton on:click={onCreate} />
+		<CreateButton on:click={onCreate} />
 		<p>Add timer</p>
 	</div>
 </div>

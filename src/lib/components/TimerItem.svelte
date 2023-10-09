@@ -1,7 +1,7 @@
 <script>
 	import { onDestroy, onMount } from "svelte";
 	import { slide } from "svelte/transition";
-	import { PrimaryButton } from "$lib/components/buttons";
+	import { ControlButton } from "$lib/components/buttons";
 
 	/**
 	 * @type {string}
@@ -171,21 +171,21 @@ j	 */
 		<p class="timer-time">
 			{formatDuration(duration + offsetDuration)}
 		</p>
-		<PrimaryButton
+		<ControlButton
 			on:click={isRunning ? pause : start}
 			symbol={isRunning ? "pause" : "play"}
 			--background-color={isRunning ? "#e5383b" : "#fff"}
 			--color={isRunning ? "#fff" : "#000"}
 			--margin="0 10px"
 		/>
-		<PrimaryButton
+		<ControlButton
 			on:click={reset}
 			symbol={"stop"}
 			--background-color="#fff"
 			--color="#000"
 			--margin="0 10px 0 0"
 		/>
-		<PrimaryButton
+		<ControlButton
 			on:click={remove}
 			symbol={"cancel"}
 			--background-color="#fff"

@@ -1,7 +1,7 @@
-import PrimaryButton from './PrimaryButton.svelte';
-import PlainButton from './PlainButton.svelte';
+import ControlButton from './ControlButton.svelte';
+import CreateButton from './CreateButton.svelte';
 
 export {
-  PrimaryButton,
-  PlainButton
+  ControlButton,
+  CreateButton
 };
