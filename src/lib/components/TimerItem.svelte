@@ -1,6 +1,6 @@
 <script>
 	import { onDestroy, onMount } from "svelte";
-	import { ControlButton } from "$lib/components/buttons";
+	import { ControlButton, CancelButton } from "$lib/components/buttons";
 
 	/**
 	 * @type {string}
@@ -192,11 +192,10 @@ j	 */
 			symbol={"stop"}
 			--background-color="#fff"
 			--color="#000"
-			--margin="0 10px 0 0"
+			--margin="0 5px 0 0"
 		/>
-		<ControlButton
+		<CancelButton
 			on:click={remove}
-			symbol={"cancel"}
 			--background-color="#fff"
 			--color="#000"
 			--margin="0 5px 0 0"

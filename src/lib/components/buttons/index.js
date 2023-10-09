@@ -1,7 +1,9 @@
 import ControlButton from './ControlButton.svelte';
-import CreateButton from './CreateButton.svelte';
+import AddButton from './AddButton.svelte';
+import CancelButton from './CancelButton.svelte';
 
 export {
+  AddButton,
   ControlButton,
-  CreateButton
+  CancelButton
 };
