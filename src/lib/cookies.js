@@ -61,7 +61,7 @@ export class TimerCookie {
 	pause(id) {
 		return updateItemInCookies(id, (item) => {
 			if (item.started_at !== null) {
-				item.duration = (new Date().getTime() - new Date(item.started_at).getTime()) / 1000;
+				item.duration += (new Date().getTime() - new Date(item.started_at).getTime()) / 1000;
 			}
 			item.started_at = null;
 			return item;
