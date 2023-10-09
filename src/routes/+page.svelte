@@ -107,13 +107,12 @@
 
 <style>
 	.div-title {
-		color: white;
-		background-color: #1f7a8c;
+		color: var(--text-header);
+		background-color: var(--bg-header);
 		padding: 1px 5px 1px 5px;
 	}
 	.timer-item {
-		color: black;
-		background-color: #fff;
+		background-color: var(--bg-primary);
 		padding: 1px 0px 1px 0px;
 	}
 	h1 {
@@ -127,8 +126,8 @@
 		border: 0;
 		border-top: 1px solid #ccc;
 		display: block;
-		border-color: black;
-		background-color: black;
+		border-color: var(--bg-secondary);
+		background-color: var(--bg-secondary);
 	}
 	div.spacer {
 		margin-top: 10px;

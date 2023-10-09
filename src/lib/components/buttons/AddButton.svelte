@@ -18,7 +18,7 @@
 		width: 150px;
 		height: 40px;
 		font-size: 1.2rem;
-		color: black;
+		color: var(--btn-primary);
 	}
 	@media (hover: hover) {
 		button:hover {
@@ -39,5 +39,6 @@
 	.center {
 		display: flex;
 		justify-content: center;
+		color: var(--btn-primary);
 	}
 </style>
