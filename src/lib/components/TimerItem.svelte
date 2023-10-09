@@ -1,6 +1,5 @@
 <script>
 	import { onDestroy, onMount } from "svelte";
-	import { blurOnEnter } from "$lib/inputDirectives.js";
 	import { slide } from "svelte/transition";
 	import { PrimaryButton } from "$lib/components/buttons";
 
@@ -121,11 +120,38 @@ j	 */
 		return `${fmt(h)}:${fmt(m)}:${fmt(s)}`;
 	}
 	/**
-	 * Function called on init
+	 * Focuses the input form when an item is created
 	 * @param {HTMLElement} node
 	 */
-	function init(node) {
+	function focusOnInit(node) {
 		node.focus();
+	}
+
+	/**
+	 * Blurs the node when Enter is pressed
+	 * @param {HTMLElement} node
+	 */
+	export function blurOnEnter(node) {
+		/**
+		 * Event handler for the keydown event.
+		 * @param {KeyboardEvent} event
+		 */
+		function handleKey(event) {
+			if (
+				event.key === "Enter" &&
+				node &&
+				typeof node.blur === "function"
+			)
+				node.blur();
+		}
+
+		node.addEventListener("keydown", handleKey);
+
+		return {
+			destroy() {
+				node.removeEventListener("keydown", handleKey);
+			},
+		};
 	}
 </script>
 
@@ -133,12 +159,12 @@ j	 */
 	<form on:submit={(e) => e.preventDefault()} id="nameForm">
 		<input
 			class="timer-name"
-			on:blur={() => onChanged(name)}
+			name="input-name"
 			type="text"
+			on:blur={() => onChanged(name)}
 			bind:value={name}
 			use:blurOnEnter
-			use:init
-			name="input-name"
+			use:focusOnInit
 		/>
 	</form>
 	<div class="row">
