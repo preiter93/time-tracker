@@ -18,11 +18,7 @@ export class TimerCookie {
 		let newTimer = new TimerItemCookie(id, `Timer ${items.length + 1}`, 0, null);
 		items.push(newTimer);
 		setCookie(JSON.stringify(items));
-		return items.map(
-			(timer) => {
-				return convertTimerItem(timer);
-			}
-		);
+		return convertTimerItem(newTimer);
 	}
 
 	/**

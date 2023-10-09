@@ -18,7 +18,9 @@
 	let timerItems = data.items.data;
 
 	async function onCreate() {
-		timerItems = cookie.create();
+		let newItem = cookie.create();
+		newItem.requestFocus = true;
+		timerItems = [...timerItems, newItem];
 	}
 
 	/**
@@ -87,6 +89,7 @@
 				duration={item.duration}
 				offsetDuration={item.offsetDuration}
 				isRunning={item.isRunning}
+				requestFocus={item.requestFocus}
 				onDelete={() => onDelete(item.id)}
 				onStart={() => onStart(item.id)}
 				onPause={() => onPause(item.id)}

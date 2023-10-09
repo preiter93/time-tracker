@@ -57,6 +57,12 @@ j	 */
 	export let isRunning = false;
 
 	/**
+	 * @type {boolean}
+	 * Request focus of the input form.
+	 */
+	export let requestFocus = false;
+
+	/**
 	 * @type {number | null} timer
 	 */
 	let timer = null;
@@ -124,7 +130,10 @@ j	 */
 	 * @param {HTMLElement} node
 	 */
 	function focusOnInit(node) {
-		node.focus();
+		if (requestFocus) {
+			node.focus();
+			requestFocus = false;
+		}
 	}
 
 	/**

@@ -9,6 +9,7 @@
  * @property {number} duration
  * @property {number} offsetDuration
  * @property {boolean} isRunning
+ * @property {boolean} [requestFocus=false]
  */
 
 export const unused = {}
