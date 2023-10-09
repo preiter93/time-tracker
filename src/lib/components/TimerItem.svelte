@@ -178,6 +178,8 @@ j	 */
 		border: none;
 		color: #333;
 		background-color: transparent;
+		width: 95%;
+		max-width: 400px;
 	}
 	.row {
 		display: flex;
