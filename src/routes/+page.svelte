@@ -136,6 +136,22 @@
 	onMount(() => {
 		document.body.className = "dark";
 		theme = "dark";
+
+		/**
+		 * We need to resynchronize the timers with the
+		 * local storage after the browser has been
+		 * hidden for a while.
+		 */
+		const onVisibilityChange = () => {
+			let state = document.visibilityState;
+			if (state == "visible") {
+				timerItems = store.list();
+			}
+		};
+		document.addEventListener(
+			"visibilitychange",
+			onVisibilityChange
+		);
 	});
 </script>
 
