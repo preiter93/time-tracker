@@ -4,4 +4,5 @@ TimeTracker is a simple web app that consists of a list of timers that can be in
 
 [Visit Website](https://preiter93.github.io/time-tracker-svelte)
 
-![](img/banner.png)
+![Fancy logo](img/banner-dark.png#gh-dark-mode-only)
+![Fancy logo](img/banner-light.png#gh-light-mode-only)
