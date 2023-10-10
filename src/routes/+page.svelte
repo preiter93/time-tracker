@@ -6,6 +6,7 @@
 	import { fade, slide } from "svelte/transition";
 	import { onMount } from "svelte";
 	import { DarkIcon, LightIcon } from "$lib/components/icons";
+	import { formatDuration } from "$lib/utils";
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -29,7 +30,7 @@
 
 	/**
 	 * @param {string} id
-	 * The timer id.
+	 * The timer i d.
 	 */
 	async function onDelete(id) {
 		timerItems = store.delete(id);
@@ -71,7 +72,7 @@
 	/**
 	 * @param {string} id
 	 * @param {string} name
-	 * The timer id.
+	 * Invoked on name change.
 	 */
 	async function onChanged(id, name) {
 		let updatedItems = store.updateName(id, name);
@@ -81,9 +82,43 @@
 	}
 
 	/**
+	 * A map from id to duration to keep book of
+	 * the total timer duration.
+	 * @type {{ id: string; duration: number; }[]}
+	 */
+	let durationsMap = data.items.data.map((timer) => {
+		return {
+			id: timer.id,
+			duration: timer.offsetDuration,
+		};
+	});
+
+	/**
+	 * @param {string} id
+	 * @param {number} duration
+	 */
+	async function onTick(id, duration) {
+		const index = durationsMap.findIndex((item) => item.id === id);
+		if (index !== -1) {
+			durationsMap[index].duration = duration;
+		}
+	}
+
+	/**
 	 * @type {string}
 	 */
 	let theme;
+
+	/**
+	 * @type {number}
+	 */
+	let totalTime = 0;
+	$: {
+		totalTime = durationsMap.reduce(
+			(sum, item) => sum + item.duration,
+			0
+		);
+	}
 
 	/**
 	 * Toggle the theme.
@@ -132,15 +167,29 @@
 				onReset={() => onReset(item.id)}
 				onChanged={(newName) =>
 					onChanged(item.id, newName)}
+				onTick={(duration) => onTick(item.id, duration)}
 			/>
 		</div>
 		<hr class="divider" />
 	{/each}
 	<div class="spacer" />
-	<AddButton on:click={onCreate} />
+	<div class="row">
+		<AddButton on:click={onCreate} />
+		<p class="text-total">
+			Total time:<span class="fixed-width"
+				>{formatDuration(totalTime)}</span
+			>
+		</p>
+	</div>
 </div>
 
 <style>
+	.row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 100%;
+	}
 	.header {
 		color: var(--text-header);
 		background-color: var(--bg-header);
@@ -191,5 +240,14 @@
 	}
 	div.spacer {
 		margin-top: 10px;
+	}
+	.text-total {
+		font-size: 16px;
+		margin-right: 10px;
+	}
+	.fixed-width {
+		display: inline-block;
+		width: 4em;
+		text-align: right;
 	}
 </style>

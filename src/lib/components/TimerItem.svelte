@@ -1,6 +1,7 @@
 <script>
 	import { onDestroy, onMount } from "svelte";
 	import { ControlButton, CancelButton } from "$lib/components/buttons";
+	import { formatDuration } from "$lib/utils";
 
 	/**
 	 * @type {string}
@@ -57,9 +58,15 @@ j	 */
 
 	/**
 	 * @type {function(string):Promise<void>}
-	 * Callback invoked on changed.
+	 * Callback invoked on name changes
 	 */
 	export let onChanged;
+
+	/**
+	 * @type {function(number):Promise<void>}
+	 * Callback invoked on duration changes
+	 */
+	export let onTick;
 
 	/**
 	 * @type {number | null} timer
@@ -68,9 +75,7 @@ j	 */
 
 	async function start() {
 		await onStart();
-		timer = setInterval(() => {
-			duration += 1;
-		}, 1000);
+		startTimer();
 	}
 
 	async function pause() {
@@ -96,11 +101,16 @@ j	 */
 
 	onMount(() => {
 		if (isRunning && timer === null) {
-			timer = setInterval(() => {
-				duration += 1;
-			}, 1000);
+			startTimer();
 		}
 	});
+
+	function startTimer() {
+		timer = setInterval(() => {
+			duration += 1;
+			onTick(duration + offsetDuration);
+		}, 1000);
+	}
 
 	onDestroy(() => {
 		if (timer !== null) {
@@ -108,22 +118,6 @@ j	 */
 			timer = null;
 		}
 	});
-
-	/**
-	 * @param {number} seconds
-	 */
-	function formatDuration(seconds) {
-		/**
-		 * @param {number} number
-		 */
-		function fmt(number) {
-			return String(number).padStart(2, "0");
-		}
-		const h = Math.floor(seconds / 3600);
-		const m = Math.floor((seconds % 3600) / 60);
-		const s = Math.floor(seconds % 60);
-		return `${fmt(h)}:${fmt(m)}:${fmt(s)}`;
-	}
 
 	/**
 	 * Focuses the input form when an item is created
