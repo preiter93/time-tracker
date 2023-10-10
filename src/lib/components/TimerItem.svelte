@@ -60,7 +60,7 @@ j	 */
 	 * @type {function(string):Promise<void>}
 	 * Callback invoked on name changes
 	 */
-	export let onChanged;
+	export let onUpdateName;
 
 	/**
 	 * @type {function(number):Promise<void>}
@@ -164,7 +164,7 @@ j	 */
 			class="name"
 			name="timerName"
 			type="text"
-			on:blur={() => onChanged(name)}
+			on:blur={() => onUpdateName(name)}
 			bind:value={name}
 			use:blurOnEnter
 			use:focusOnInit

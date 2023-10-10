@@ -47,7 +47,7 @@
 	button {
 		width: 40px;
 		height: 40px;
-		border: 0.1px solid #5c5d5c;
+		border: 0.1px solid var(--dark-gray);
 		font-size: 1.4rem;
 		border-radius: 0.2rem;
 		align-items: center;

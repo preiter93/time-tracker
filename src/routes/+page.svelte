@@ -17,55 +17,64 @@
 	let store = new TimerStore();
 
 	/**
-	 * Tracking items
+	 * Timer items
 	 * @type {import('$lib/types.js').TimerItem[]}
 	 */
-	let timerItems = data.items.data;
+	let timers = data.items.data;
 
-	async function onCreate() {
+	/**
+	 * @type {string}
+	 * The theme (light/dark)
+	 */
+	let theme;
+
+	/**
+	 * Creates a timer.
+	 */
+	async function createTimer() {
 		let newItem = store.create();
 		newItem.requestFocus = true;
-		timerItems = [...timerItems, newItem];
+		timers = [...timers, newItem];
 	}
 
 	/**
 	 * @param {string} id
-	 * The timer i d.
+	 * Deletes a timer
 	 */
-	async function onDelete(id) {
-		timerItems = store.delete(id);
+	async function deleteTimer(id) {
+		timers = store.delete(id);
 	}
 
 	/**
 	 * @param {string} id
-	 * The timer id.
+	 * Starts a timer.
 	 */
-	async function onStart(id) {
-		let updatedItems = store.start(id);
-		if (updatedItems !== null) {
-			timerItems = updatedItems;
+	async function startTimer(id) {
+		let newTimers = store.start(id);
+		if (newTimers !== null) {
+			timers = newTimers;
 		}
 	}
 
 	/**
 	 * @param {string} id
-	 * The timer id.
+	 * Pauses a timer.
 	 */
-	async function onPause(id) {
-		let updatedItems = store.pause(id);
-		if (updatedItems !== null) {
-			timerItems = updatedItems;
+	async function pauseTimer(id) {
+		let newTimers = store.pause(id);
+		if (newTimers !== null) {
+			timers = newTimers;
 		}
 	}
 
 	/**
 	 * @param {string} id
-	 * The timer id.
+	 * Resets a timer.
 	 */
-	async function onReset(id) {
-		let updatedItems = store.reset(id);
-		if (updatedItems !== null) {
-			timerItems = updatedItems;
+	async function resetTimer(id) {
+		let newTimers = store.reset(id);
+		if (newTimers !== null) {
+			timers = newTimers;
 		}
 	}
 
@@ -74,10 +83,10 @@
 	 * @param {string} name
 	 * Invoked on name change.
 	 */
-	async function onChanged(id, name) {
-		let updatedItems = store.updateName(id, name);
-		if (updatedItems !== null) {
-			timerItems = updatedItems;
+	async function updateName(id, name) {
+		let newTimers = store.updateName(id, name);
+		if (newTimers !== null) {
+			timers = newTimers;
 		}
 	}
 
@@ -97,7 +106,7 @@
 	 * @param {string} id
 	 * @param {number} duration
 	 */
-	async function onTick(id, duration) {
+	async function updateDurations(id, duration) {
 		const index = durationsMap.findIndex((item) => item.id === id);
 		if (index !== -1) {
 			durationsMap[index].duration = duration;
@@ -105,20 +114,12 @@
 	}
 
 	/**
-	 * @type {string}
-	 */
-	let theme;
-
-	/**
 	 * @type {number}
 	 */
-	let totalTime = 0;
-	$: {
-		totalTime = durationsMap.reduce(
-			(sum, item) => sum + item.duration,
-			0
-		);
-	}
+	$: totalTime = durationsMap.reduce(
+		(sum, item) => sum + item.duration,
+		0
+	);
 
 	/**
 	 * Toggle the theme.
@@ -134,8 +135,9 @@
 	 * Set default theme to light.
 	 */
 	onMount(() => {
-		document.body.className = "dark";
-		theme = "dark";
+		let defaultTheme = "dark";
+		document.body.className = defaultTheme;
+		theme = defaultTheme;
 
 		/**
 		 * We need to resynchronize the timers with the
@@ -145,7 +147,7 @@
 		const onVisibilityChange = () => {
 			let state = document.visibilityState;
 			if (state == "visible") {
-				timerItems = store.list();
+				timers = store.list();
 			}
 		};
 		document.addEventListener(
@@ -169,7 +171,7 @@
 </div>
 <div>
 	<hr class="divider" />
-	{#each timerItems as item (item.id)}
+	{#each timers as item (item.id)}
 		<div class="timer-item" transition:slide>
 			<TimerItem
 				name={item.name}
@@ -177,21 +179,22 @@
 				offsetDuration={item.offsetDuration}
 				isRunning={item.isRunning}
 				requestFocus={item.requestFocus}
-				onDelete={() => onDelete(item.id)}
-				onStart={() => onStart(item.id)}
-				onPause={() => onPause(item.id)}
-				onReset={() => onReset(item.id)}
-				onChanged={(newName) =>
-					onChanged(item.id, newName)}
-				onTick={(duration) => onTick(item.id, duration)}
+				onDelete={() => deleteTimer(item.id)}
+				onStart={() => startTimer(item.id)}
+				onPause={() => pauseTimer(item.id)}
+				onReset={() => resetTimer(item.id)}
+				onUpdateName={(newName) =>
+					updateName(item.id, newName)}
+				onTick={(duration) =>
+					updateDurations(item.id, duration)}
 			/>
 		</div>
 		<hr class="divider" />
 	{/each}
 	<div class="spacer" />
 	<div class="row">
-		<AddButton on:click={onCreate} />
-		<p class="text-total">
+		<AddButton on:click={createTimer} />
+		<p class="text-total-timer">
 			Total time:<span class="fixed-width"
 				>{formatDuration(totalTime)}</span
 			>
@@ -209,14 +212,14 @@
 	.header {
 		color: var(--text-header);
 		background-color: var(--bg-header);
-		padding: 1px 5px 1px 5px;
+		padding: 1px 5px;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 	}
 	.title {
 		text-align: center;
-		font-size: 34px;
+		font-size: 2.4em;
 		flex: 1;
 		margin-left: 20px;
 	}
@@ -242,11 +245,11 @@
 	}
 	.timer-item {
 		background-color: var(--bg-primary);
-		padding: 1px 0px 1px 0px;
+		padding: 1px 0px;
 	}
 	hr.divider {
 		border-width: 1px;
-		margin: 0 0;
+		margin: 0;
 		height: 1px;
 		border: 0;
 		border-top: 1px solid #ccc;
@@ -257,13 +260,13 @@
 	div.spacer {
 		margin-top: 10px;
 	}
-	.text-total {
-		font-size: 16px;
+	.text-total-timer {
+		font-size: 1em;
 		margin-right: 10px;
 	}
 	.fixed-width {
 		display: inline-block;
-		width: 4em;
+		width: 4.1em;
 		text-align: right;
 	}
 </style>

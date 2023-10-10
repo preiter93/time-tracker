@@ -5,11 +5,6 @@
 <svelte:head>
 	<style>
 		@import url("https://fonts.googleapis.com/css?family=Raleway&display=swap");
-		h1,
-		p,
-		input[type="text"] {
-			font-family: "Raleway", sans-serif;
-		}
 	</style>
 </svelte:head>
 
@@ -21,6 +16,9 @@
 		--dark-gray: #20262e;
 		--action-red: #c30101;
 		--turquoise: #1f7a8c;
+	}
+	:global(h1, p, input[type="text"]) {
+		font-family: "Raleway", sans-serif;
 	}
 	:global(body) {
 		background-color: var(--bg-primary);
