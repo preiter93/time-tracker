@@ -130,6 +130,23 @@
 			theme = newTheme;
 		}
 	}
+	/**
+	 * @type {number|null}
+	 */
+	let draggingIndex = null;
+
+	/**
+	 * @param {number} index
+	 */
+	function swapTimers(index) {
+		if (draggingIndex != null && index != draggingIndex) {
+			// swap
+			timers = store.swap(draggingIndex, index);
+
+			// balance
+			draggingIndex = index;
+		}
+	}
 
 	/**
 	 * Set default theme to light.
@@ -171,8 +188,21 @@
 </div>
 <div>
 	<hr class="divider" />
-	{#each timers as item (item.id)}
-		<div class="timer-item" transition:slide>
+	{#each timers as item, index (item.id)}
+		<div
+			class="timer-item"
+			role="application"
+			transition:slide
+			draggable="true"
+			on:dragstart={() => {
+				draggingIndex = index;
+			}}
+			on:dragend={() => {
+				draggingIndex = null;
+			}}
+			on:dragenter={() => swapTimers(index)}
+			on:dragover|preventDefault
+		>
 			<TimerItem
 				name={item.name}
 				duration={item.duration}

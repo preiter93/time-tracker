@@ -62,6 +62,23 @@ export class TimerStore {
 	}
 
 	/**
+	 * @param {number} index1
+	 * @param {number} index2
+	 * Swap two items
+	 */
+	swap(index1, index2) {
+		let timers = fetchTimerItemsFromStore();
+		const temp = timers[index1];
+		timers[index1] = timers[index2];
+		timers[index2] = temp;
+		setItems(JSON.stringify(timers));
+		return timers.map(
+			(timer) => {
+				return convertTimerItem(timer);
+			}
+		);
+	}
+	/**
 	 * @param {string} id
 	 * The timer id.
 	 */
