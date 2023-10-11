@@ -1,7 +1,12 @@
 <script>
 	import { onDestroy, onMount } from "svelte";
 	import { ControlButton, CancelButton } from "$lib/components/buttons";
-	import { formatDuration } from "$lib/utils";
+	import { formatDuration, parseTime } from "$lib/utils";
+
+	/**
+	 * @type {number | null} timer
+	 */
+	let timer = null;
 
 	/**
 	 * @type {string}
@@ -33,58 +38,65 @@ j	 */
 	export let requestFocus = false;
 
 	/**
-	 * @type {function():Promise<void>}
+	 * @type {string}
+	 * The displayed time.
+j	 */
+	$: displayedTime = formatDuration(duration + offsetDuration);
+
+	/**
+	 * @type {function():void}
 	 * Callback invoked on delete.
 	 */
 	export let onDelete;
 
 	/**
-	 * @type {function():Promise<void>}
+	 * @type {function():void}
 	 * Callback invoked on start.
 	 */
 	export let onStart;
 
 	/**
-	 * @type {function():Promise<void>}
+	 * @type {function():void}
 	 * Callback invoked on pause.
 	 */
 	export let onPause;
 
 	/**
-	 * @type {function():Promise<void>}
+	 * @type {function():void}
 	 * Callback invoked on reset.
 	 */
 	export let onReset;
 
 	/**
-	 * @type {function(string):Promise<void>}
+	 * @type {function(string):void}
 	 * Callback invoked on name changes
 	 */
 	export let onUpdateName;
 
 	/**
-	 * @type {function(number):Promise<void>}
-	 * Callback invoked on duration changes
+	 * @type {function(number):void}
+	 * Callback invoked on time change
 	 */
-	export let onTick;
+	export let onUpdateDuration;
 
 	/**
-	 * @type {number | null} timer
+	 * @type {function(number):void}
+	 * Callback invoked on intervall tick
 	 */
-	let timer = null;
+	export let onIntervall;
 
-	async function start() {
-		await onStart();
+	function start() {
+		onStart();
 		startTimer();
 	}
 
-	async function pause() {
-		await onPause();
+	function pause() {
+		onPause();
 		resetInterval();
 	}
 
-	async function reset() {
-		await onReset();
+	function reset() {
+		onReset();
 		resetInterval();
 	}
 
@@ -95,8 +107,19 @@ j	 */
 		}
 	}
 
-	async function remove() {
-		await onDelete();
+	function remove() {
+		onDelete();
+	}
+
+	function updateDuration() {
+		let d = parseTime(displayedTime);
+		if (d !== null) {
+			onUpdateDuration(d);
+		} else {
+			displayedTime = formatDuration(
+				duration + offsetDuration
+			);
+		}
 	}
 
 	onMount(() => {
@@ -108,7 +131,7 @@ j	 */
 	function startTimer() {
 		timer = setInterval(() => {
 			duration += 1;
-			onTick(duration + offsetDuration);
+			onIntervall(duration + offsetDuration);
 		}, 1000);
 	}
 
@@ -171,9 +194,15 @@ j	 */
 		/>
 	</div>
 	<div class="row">
-		<p class="time">
-			{formatDuration(duration + offsetDuration)}
-		</p>
+		<input
+			class="time"
+			name="timerTime"
+			type="text"
+			on:blur={() => updateDuration()}
+			bind:value={displayedTime}
+			use:blurOnEnter
+			use:focusOnInit
+		/>
 		<ControlButton
 			on:click={isRunning ? pause : start}
 			symbol={isRunning ? "pause" : "play"}
@@ -197,18 +226,21 @@ j	 */
 		justify-content: space-between;
 		align-items: center;
 	}
-	.time {
-		font-size: 20px;
-		margin: 0 20px 0 0;
-		width: 64px;
-	}
-	.name {
+	input[type="text"] {
 		font-size: 20px;
 		border: none;
 		background-color: transparent;
+	}
+	.name {
 		width: 95%;
 		max-width: 400px;
 		margin-left: 5px;
+	}
+	.time {
+		font-size: 20px;
+		margin: 0 20px 0 0;
+		width: 90px;
+		text-align: right;
 	}
 	.row {
 		display: flex;

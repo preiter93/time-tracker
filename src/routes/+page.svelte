@@ -31,7 +31,7 @@
 	/**
 	 * Creates a timer.
 	 */
-	async function createTimer() {
+	function createTimer() {
 		let newItem = store.create();
 		newItem.requestFocus = true;
 		timers = [...timers, newItem];
@@ -41,7 +41,7 @@
 	 * @param {string} id
 	 * Deletes a timer
 	 */
-	async function deleteTimer(id) {
+	function deleteTimer(id) {
 		timers = store.delete(id);
 	}
 
@@ -49,7 +49,7 @@
 	 * @param {string} id
 	 * Starts a timer.
 	 */
-	async function startTimer(id) {
+	function startTimer(id) {
 		let newTimers = store.start(id);
 		if (newTimers !== null) {
 			timers = newTimers;
@@ -60,7 +60,7 @@
 	 * @param {string} id
 	 * Pauses a timer.
 	 */
-	async function pauseTimer(id) {
+	function pauseTimer(id) {
 		let newTimers = store.pause(id);
 		if (newTimers !== null) {
 			timers = newTimers;
@@ -71,9 +71,10 @@
 	 * @param {string} id
 	 * Resets a timer.
 	 */
-	async function resetTimer(id) {
+	function resetTimer(id) {
 		let newTimers = store.reset(id);
 		if (newTimers !== null) {
+			updateDurationsMap(id, 0);
 			timers = newTimers;
 		}
 	}
@@ -83,9 +84,21 @@
 	 * @param {string} name
 	 * Invoked on name change.
 	 */
-	async function updateName(id, name) {
+	function updateName(id, name) {
 		let newTimers = store.updateName(id, name);
 		if (newTimers !== null) {
+			timers = newTimers;
+		}
+	}
+	/**
+	 * @param {string} id
+	 * @param {number} duration
+	 * Updates the duration in the local storage.
+	 */
+	function updateDuration(id, duration) {
+		let newTimers = store.updateDuration(id, duration);
+		if (newTimers !== null) {
+			updateDurationsMap(id, duration);
 			timers = newTimers;
 		}
 	}
@@ -105,8 +118,10 @@
 	/**
 	 * @param {string} id
 	 * @param {number} duration
+	 * Updates the duration in the durationsMap, not
+	 * in the local storage.
 	 */
-	async function updateDurations(id, duration) {
+	async function updateDurationsMap(id, duration) {
 		const index = durationsMap.findIndex((item) => item.id === id);
 		if (index !== -1) {
 			durationsMap[index].duration = duration;
@@ -215,8 +230,10 @@
 				onReset={() => resetTimer(item.id)}
 				onUpdateName={(newName) =>
 					updateName(item.id, newName)}
-				onTick={(duration) =>
-					updateDurations(item.id, duration)}
+				onUpdateDuration={(newDuration) =>
+					updateDuration(item.id, newDuration)}
+				onIntervall={(duration) =>
+					updateDurationsMap(item.id, duration)}
 			/>
 		</div>
 		<hr class="divider" />

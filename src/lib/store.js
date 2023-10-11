@@ -101,6 +101,16 @@ export class TimerStore {
 		})
 	}
 
+	/**
+	 * @param {string} id
+	 * @param {number} duration
+	 */
+	updateDuration(id, duration) {
+		return updateTimerItemInStore(id, (item) => {
+			item.duration = duration;
+			return item;
+		})
+	}
 
 }
 
