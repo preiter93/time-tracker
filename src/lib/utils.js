@@ -23,7 +23,13 @@ export function parseTime(time) {
 	let h = Number(hs);
 	let m = Number(ms);
 	let s = Number(ss);
-	if (isNaN(h) || isNaN(m) || isNaN(s) || m >= 60 || s >= 60) {
+	if (isNaN(h) || h < 0) {
+		return null;
+	}
+	if (isNaN(m) || m < 0 || m >= 60) {
+		return null;
+	}
+	if (isNaN(s) || s < 0 || s >= 60) {
 		return null;
 	}
 	return h * 3600 + m * 60 + s;
