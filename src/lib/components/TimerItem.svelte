@@ -179,6 +179,16 @@ j	 */
 			},
 		};
 	}
+
+	export let isInputFocused = false;
+
+	function handleFocus() {
+		isInputFocused = true;
+	}
+
+	function handleBlur() {
+		isInputFocused = false;
+	}
 </script>
 
 <div class="outer">
@@ -187,7 +197,13 @@ j	 */
 			class="name"
 			name="timerName"
 			type="text"
-			on:blur={() => onUpdateName(name)}
+			on:blur={() => {
+				handleBlur();
+				onUpdateName(name);
+			}}
+			on:focus={() => {
+				handleFocus();
+			}}
 			bind:value={name}
 			use:blurOnEnter
 			use:focusOnInit
@@ -199,7 +215,13 @@ j	 */
 			name="timerTime"
 			type="text"
 			disabled={isRunning}
-			on:blur={() => updateDuration()}
+			on:blur={() => {
+				handleBlur();
+				updateDuration();
+			}}
+			on:focus={() => {
+				handleFocus();
+			}}
 			bind:value={displayedTime}
 			use:blurOnEnter
 			use:focusOnInit
