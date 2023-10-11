@@ -187,6 +187,13 @@
 			onVisibilityChange
 		);
 	});
+
+	/**
+	 * @param {boolean} childInputFocus
+	 * Whether an input field is being focused. Used
+	 * to disable drag and drop.
+	 */
+	let childInputFocus = false;
 </script>
 
 <div class="header">
@@ -208,7 +215,7 @@
 			class="timer-item"
 			role="application"
 			transition:slide
-			draggable="true"
+			draggable={childInputFocus ? "false" : "true"}
 			on:dragstart={() => {
 				draggingIndex = index;
 			}}
@@ -234,6 +241,7 @@
 					updateDuration(item.id, newDuration)}
 				onIntervall={(duration) =>
 					updateDurationsMap(item.id, duration)}
+				bind:isInputFocused={childInputFocus}
 			/>
 		</div>
 		<hr class="divider" />
