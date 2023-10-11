@@ -194,6 +194,35 @@
 	 * to disable drag and drop.
 	 */
 	let childInputFocus = false;
+
+	/**
+	 * Handles drag start
+	 * @param {DragEvent} event
+	 * @param {number} index
+	 */
+	function handleDragStart(event, index) {
+		draggingIndex = index;
+		// Necessary for drag & drop to work on touch screens
+		let dataTransfer = event.dataTransfer;
+		if (dataTransfer !== null) {
+			dataTransfer.setData("text/plain", "");
+		}
+	}
+
+	/**
+	 * Handles drag end
+	 */
+	function handleDragEnd() {
+		draggingIndex = null;
+	}
+
+	/**
+	 * Handles drag enter
+	 * @param {number} index
+	 */
+	function handleDragEnter(index) {
+		swapTimers(index);
+	}
 </script>
 
 <div class="header">
@@ -213,17 +242,14 @@
 	{#each timers as item, index (item.id)}
 		<div
 			class="timer-item"
-			role="application"
+			role="listitem"
 			transition:slide
 			draggable={childInputFocus ? "false" : "true"}
-			on:dragstart={() => {
-				draggingIndex = index;
-			}}
-			on:dragend={() => {
-				draggingIndex = null;
-			}}
-			on:dragenter={() => swapTimers(index)}
+			on:dragstart={(event) => handleDragStart(event, index)}
+			on:dragend={() => handleDragEnd()}
+			on:dragenter={() => handleDragEnter(index)}
 			on:dragover|preventDefault
+			on:drop|preventDefault
 		>
 			<TimerItem
 				name={item.name}
