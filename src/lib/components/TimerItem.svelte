@@ -198,6 +198,7 @@ j	 */
 			class="time"
 			name="timerTime"
 			type="text"
+			disabled={isRunning}
 			on:blur={() => updateDuration()}
 			bind:value={displayedTime}
 			use:blurOnEnter
