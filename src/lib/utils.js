@@ -13,3 +13,18 @@ export function formatDuration(seconds) {
 	const s = Math.floor(seconds % 60);
 	return `${fmt(h)}:${fmt(m)}:${fmt(s)}`;
 }
+
+/**
+ * @param {string} time
+ * @return {number|null} duration
+ */
+export function parseTime(time) {
+	let [hs, ms, ss] = time.split(":");
+	let h = Number(hs);
+	let m = Number(ms);
+	let s = Number(ss);
+	if (isNaN(h) || isNaN(m) || isNaN(s) || m >= 60 || s >= 60) {
+		return null;
+	}
+	return h * 3600 + m * 60 + s;
+}
