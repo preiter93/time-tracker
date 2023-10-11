@@ -7,6 +7,7 @@
 	import { onMount } from "svelte";
 	import { DarkIcon, LightIcon } from "$lib/components/icons";
 	import { formatDuration } from "$lib/utils";
+	import { SortableList } from "@jhubbardsf/svelte-sortablejs";
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -145,23 +146,6 @@
 			theme = newTheme;
 		}
 	}
-	/**
-	 * @type {number|null}
-	 */
-	let draggingIndex = null;
-
-	/**
-	 * @param {number} index
-	 */
-	function swapTimers(index) {
-		if (draggingIndex != null && index != draggingIndex) {
-			// swap
-			timers = store.swap(draggingIndex, index);
-
-			// balance
-			draggingIndex = index;
-		}
-	}
 
 	/**
 	 * Set default theme to light.
@@ -196,32 +180,11 @@
 	let childInputFocus = false;
 
 	/**
-	 * Handles drag start
-	 * @param {DragEvent} event
-	 * @param {number} index
+	 * On drag end
+	 * @param {any} event
 	 */
-	function handleDragStart(event, index) {
-		draggingIndex = index;
-		// Necessary for drag & drop to work on touch screens
-		let dataTransfer = event.dataTransfer;
-		if (dataTransfer !== null) {
-			dataTransfer.setData("text/plain", "");
-		}
-	}
-
-	/**
-	 * Handles drag end
-	 */
-	function handleDragEnd() {
-		draggingIndex = null;
-	}
-
-	/**
-	 * Handles drag enter
-	 * @param {number} index
-	 */
-	function handleDragEnter(index) {
-		swapTimers(index);
+	function onSortEnd(event) {
+		timers = store.swap(event.oldIndex, event.newIndex);
 	}
 </script>
 
@@ -239,39 +202,52 @@
 </div>
 <div>
 	<hr class="divider" />
-	{#each timers as item, index (item.id)}
-		<div
-			class="timer-item"
-			role="listitem"
-			transition:slide
-			draggable={childInputFocus ? "false" : "true"}
-			on:dragstart={(event) => handleDragStart(event, index)}
-			on:dragend={() => handleDragEnd()}
-			on:dragenter={() => handleDragEnter(index)}
-			on:dragover|preventDefault
-			on:drop|preventDefault
-		>
-			<TimerItem
-				name={item.name}
-				duration={item.duration}
-				offsetDuration={item.offsetDuration}
-				isRunning={item.isRunning}
-				requestFocus={item.requestFocus}
-				onDelete={() => deleteTimer(item.id)}
-				onStart={() => startTimer(item.id)}
-				onPause={() => pauseTimer(item.id)}
-				onReset={() => resetTimer(item.id)}
-				onUpdateName={(newName) =>
-					updateName(item.id, newName)}
-				onUpdateDuration={(newDuration) =>
-					updateDuration(item.id, newDuration)}
-				onIntervall={(duration) =>
-					updateDurationsMap(item.id, duration)}
-				bind:isInputFocused={childInputFocus}
-			/>
-		</div>
-		<hr class="divider" />
-	{/each}
+	<SortableList class="sortable" onEnd={(e) => onSortEnd(e)}>
+		{#each timers as item (item.id)}
+			<div>
+				<div
+					class="timer-item"
+					role="listitem"
+					transition:slide
+				>
+					<TimerItem
+						name={item.name}
+						duration={item.duration}
+						offsetDuration={item.offsetDuration}
+						isRunning={item.isRunning}
+						requestFocus={item.requestFocus}
+						onDelete={() =>
+							deleteTimer(item.id)}
+						onStart={() =>
+							startTimer(item.id)}
+						onPause={() =>
+							pauseTimer(item.id)}
+						onReset={() =>
+							resetTimer(item.id)}
+						onUpdateName={(newName) =>
+							updateName(
+								item.id,
+								newName
+							)}
+						onUpdateDuration={(
+							newDuration
+						) =>
+							updateDuration(
+								item.id,
+								newDuration
+							)}
+						onIntervall={(duration) =>
+							updateDurationsMap(
+								item.id,
+								duration
+							)}
+						bind:isInputFocused={childInputFocus}
+					/>
+				</div>
+				<hr class="divider" />
+			</div>
+		{/each}
+	</SortableList>
 	<div class="spacer" />
 	<div class="row">
 		<AddButton on:click={createTimer} />
