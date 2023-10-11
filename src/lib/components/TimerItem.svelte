@@ -260,8 +260,6 @@ j	 */
 		margin-left: 5px;
 	}
 	.time {
-		font-size: 20px;
-		margin: 0 20px 0 0;
 		width: 90px;
 		text-align: right;
 	}
