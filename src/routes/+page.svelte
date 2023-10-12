@@ -202,7 +202,10 @@
 		// Necessary for drag & drop to work on touch screens
 		let dataTransfer = event.dataTransfer;
 		if (dataTransfer !== null) {
-			dataTransfer.setData("text/plain", "");
+			let data = JSON.stringify({
+				index: index,
+			});
+			dataTransfer.setData("text/plain", data);
 		}
 	}
 
