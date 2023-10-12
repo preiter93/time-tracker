@@ -134,8 +134,8 @@ j	 */
 
 	function startTimer() {
 		timer = setInterval(() => {
+			onIntervall(totalDuration + 1);
 			duration += 1;
-			onIntervall(totalDuration);
 		}, 1000);
 	}
 

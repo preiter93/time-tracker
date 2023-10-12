@@ -3,6 +3,9 @@ const storeKey = 'items';
 export class TimerStore {
 	constructor() { }
 
+	/**
+	 * @returns {Array<import('$lib/types.js').TimerItem>|null}
+	 */
 	list() {
 		let items = fetchTimerItemsFromStore();
 		return items.map(
@@ -12,18 +15,26 @@ export class TimerStore {
 		);
 	}
 
+
+	/**
+	 * @returns {Array<import('$lib/types.js').TimerItem>|null}
+	 */
 	create() {
 		let items = fetchTimerItemsFromStore();
 		let id = generateRandomID();
 		let newTimer = new TimerItemValue(id, `Timer ${items.length + 1}`, 0, null);
 		items.push(newTimer);
 		setItems(JSON.stringify(items));
-		return convertTimerItem(newTimer);
+		return items.map(
+			(timer) => {
+				return convertTimerItem(timer, timer.id === id);
+			}
+		);
 	}
 
 	/**
 	 * @param {string} id
-	 * The timer id.
+	 * @returns {Array<import('$lib/types.js').TimerItem>|null}
 	 */
 	delete(id) {
 		let items = fetchTimerItemsFromStore();
@@ -38,7 +49,7 @@ export class TimerStore {
 
 	/**
 	 * @param {string} id
-	 * The timer id.
+	 * @returns {Array<import('$lib/types.js').TimerItem>|null}
 	 */
 	start(id) {
 		return updateTimerItemInStore(id, (item) => {
@@ -49,7 +60,7 @@ export class TimerStore {
 
 	/**
 	 * @param {string} id
-	 * The timer id.
+	 * @returns {Array<import('$lib/types.js').TimerItem>|null}
 	 */
 	pause(id) {
 		return updateTimerItemInStore(id, (item) => {
@@ -190,9 +201,10 @@ function generateRandomID() {
 
 /**
  * @param {TimerItemValue} timer
+ * @param {boolean} [requestFocus=false]
  * @returns {import('$lib/types.js').TimerItem}
  */
-function convertTimerItem(timer) {
+function convertTimerItem(timer, requestFocus) {
 	const isRunning =
 		timer.started_at !==
 		null;
@@ -212,5 +224,6 @@ function convertTimerItem(timer) {
 		offsetDuration:
 			timer.duration +
 			sinceStarted,
+		requestFocus: requestFocus,
 	};
 }

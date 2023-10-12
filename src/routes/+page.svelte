@@ -32,9 +32,8 @@
 	 * Creates a timer.
 	 */
 	function createTimer() {
-		let newItem = store.create();
-		newItem.requestFocus = true;
-		timers = [...timers, newItem];
+		timers = store.create();
+		console.log(timers);
 	}
 
 	/**
@@ -74,7 +73,6 @@
 	function resetTimer(id) {
 		let newTimers = store.reset(id);
 		if (newTimers !== null) {
-			updateDurationsMap(id, 0);
 			timers = newTimers;
 		}
 	}
@@ -98,7 +96,6 @@
 	function updateDuration(id, duration) {
 		let newTimers = store.updateDuration(id, duration);
 		if (newTimers !== null) {
-			updateDurationsMap(id, duration);
 			timers = newTimers;
 		}
 	}
@@ -108,7 +105,7 @@
 	 * the total timer duration.
 	 * @type {{ id: string; duration: number; }[]}
 	 */
-	let durationsMap = data.items.data.map((timer) => {
+	$: durationsMap = timers.map((timer) => {
 		return {
 			id: timer.id,
 			duration: timer.offsetDuration,
@@ -121,7 +118,7 @@
 	 * Updates the duration in the durationsMap, not
 	 * in the local storage.
 	 */
-	async function updateDurationsMap(id, duration) {
+	function updateDurationsMap(id, duration) {
 		const index = durationsMap.findIndex((item) => item.id === id);
 		if (index !== -1) {
 			durationsMap[index].duration = duration;
@@ -261,18 +258,12 @@
 					onStart={() => startTimer(item.id)}
 					onPause={() => pauseTimer(item.id)}
 					onReset={() => resetTimer(item.id)}
-					onUpdateName={(newName) =>
-						updateName(item.id, newName)}
-					onUpdateDuration={(newDuration) =>
-						updateDuration(
-							item.id,
-							newDuration
-						)}
-					onIntervall={(duration) =>
-						updateDurationsMap(
-							item.id,
-							duration
-						)}
+					onUpdateName={(name) =>
+						updateName(item.id, name)}
+					onUpdateDuration={(d) =>
+						updateDuration(item.id, d)}
+					onIntervall={(d) =>
+						updateDurationsMap(item.id, d)}
 					bind:isInputFocused
 				/>
 			</div>
