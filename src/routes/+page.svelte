@@ -193,7 +193,7 @@
 	 * Whether an input field is being focused. Used
 	 * to disable drag and drop.
 	 */
-	let childInputFocus = false;
+	let isInputFocused = false;
 
 	/**
 	 * Handles drag start
@@ -241,37 +241,45 @@
 	<hr class="divider" />
 	{#each timers as item, index (item.id)}
 		<div
-			class="timer-item"
 			role="listitem"
-			transition:slide
-			draggable={childInputFocus ? "false" : "true"}
+			draggable={!isInputFocused}
 			on:dragstart={(event) => handleDragStart(event, index)}
 			on:dragend={() => handleDragEnd()}
 			on:dragenter={() => handleDragEnter(index)}
 			on:dragover|preventDefault
 			on:drop|preventDefault
 		>
-			<TimerItem
-				name={item.name}
-				duration={item.duration}
-				offsetDuration={item.offsetDuration}
-				isRunning={item.isRunning}
-				requestFocus={item.requestFocus}
-				onDelete={() => deleteTimer(item.id)}
-				onStart={() => startTimer(item.id)}
-				onPause={() => pauseTimer(item.id)}
-				onReset={() => resetTimer(item.id)}
-				onUpdateName={(newName) =>
-					updateName(item.id, newName)}
-				onUpdateDuration={(newDuration) =>
-					updateDuration(item.id, newDuration)}
-				onIntervall={(duration) =>
-					updateDurationsMap(item.id, duration)}
-				bind:isInputFocused={childInputFocus}
-			/>
+			<hr class="divider" />
+			<div class="timer-item" transition:slide>
+				<TimerItem
+					name={item.name}
+					duration={item.duration}
+					offsetDuration={item.offsetDuration}
+					isRunning={item.isRunning}
+					requestFocus={item.requestFocus}
+					onDelete={() => deleteTimer(item.id)}
+					onStart={() => startTimer(item.id)}
+					onPause={() => pauseTimer(item.id)}
+					onReset={() => resetTimer(item.id)}
+					onUpdateName={(newName) =>
+						updateName(item.id, newName)}
+					onUpdateDuration={(newDuration) =>
+						updateDuration(
+							item.id,
+							newDuration
+						)}
+					onIntervall={(duration) =>
+						updateDurationsMap(
+							item.id,
+							duration
+						)}
+					bind:isInputFocused
+				/>
+			</div>
+			<hr class="divider" />
 		</div>
-		<hr class="divider" />
 	{/each}
+	<hr class="divider" />
 	<div class="spacer" />
 	<div class="row">
 		<AddButton on:click={createTimer} />
@@ -329,9 +337,7 @@
 		padding: 1px 0px;
 	}
 	hr.divider {
-		border-width: 1px;
 		margin: 0;
-		height: 1px;
 		border: 0;
 		border-top: 1px solid #ccc;
 		display: block;
