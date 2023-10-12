@@ -38,10 +38,16 @@ j	 */
 	export let requestFocus = false;
 
 	/**
+	 * @type {number}
+	 * The total duration
+j	 */
+	$: totalDuration = duration + offsetDuration;
+
+	/**
 	 * @type {string}
 	 * The displayed time.
 j	 */
-	$: displayedTime = formatDuration(duration + offsetDuration);
+	$: displayedTime = formatDuration(totalDuration);
 
 	/**
 	 * @type {function():void}
@@ -116,9 +122,7 @@ j	 */
 		if (d !== null) {
 			onUpdateDuration(d);
 		} else {
-			displayedTime = formatDuration(
-				duration + offsetDuration
-			);
+			displayedTime = formatDuration(totalDuration);
 		}
 	}
 
@@ -131,7 +135,7 @@ j	 */
 	function startTimer() {
 		timer = setInterval(() => {
 			duration += 1;
-			onIntervall(duration + offsetDuration);
+			onIntervall(totalDuration);
 		}, 1000);
 	}
 
