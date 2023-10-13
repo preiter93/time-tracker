@@ -2,11 +2,18 @@
 	import { onDestroy, onMount } from "svelte";
 	import { ControlButton, CancelButton } from "$lib/components/buttons";
 	import { formatDuration, parseTime } from "$lib/utils";
+	import { durationsStore } from "$lib/store";
 
 	/**
 	 * @type {number | null} timer
 	 */
 	let timer = null;
+
+	/**
+	 * @type {string}
+	 * The timer id.
+	 */
+	export let id;
 
 	/**
 	 * @type {string}
@@ -77,74 +84,48 @@ j	 */
 	 * @type {function(string):void}
 	 * Callback invoked on name changes
 	 */
-	export let onUpdateName;
+	export let onChangeName;
 
 	/**
 	 * @type {function(number):void}
 	 * Callback invoked on time change
 	 */
-	export let onUpdateDuration;
-
-	/**
-	 * @type {function(number):void}
-	 * Callback invoked on intervall tick
-	 */
-	export let onIntervall;
+	export let onChangeDuration;
 
 	function start() {
-		onStart();
 		startTimer();
+		onStart();
 	}
 
 	function pause() {
+		if (timer !== null) {
+			clearInterval(timer);
+		}
 		onPause();
-		resetInterval();
 	}
 
 	function reset() {
-		onReset();
-		resetInterval();
-	}
-
-	function resetInterval() {
 		if (timer !== null) {
 			clearInterval(timer);
-			timer = null;
 		}
+		onReset();
 	}
 
-	function remove() {
-		onDelete();
-	}
-
-	function updateDuration() {
-		let d = parseTime(displayedTime);
-		if (d !== null) {
-			onUpdateDuration(d);
-		} else {
-			displayedTime = formatDuration(totalDuration);
+	function changeDuration() {
+		let duration = parseTime(displayedTime);
+		if (duration !== null) {
+			onChangeDuration(duration);
 		}
 	}
-
-	onMount(() => {
-		if (isRunning && timer === null) {
-			startTimer();
-		}
-	});
 
 	function startTimer() {
 		timer = setInterval(() => {
-			onIntervall(totalDuration + 1);
+			durationsStore.update((value) => {
+				return value.set(id, totalDuration + 1);
+			});
 			duration += 1;
 		}, 1000);
 	}
-
-	onDestroy(() => {
-		if (timer !== null) {
-			clearInterval(timer);
-			timer = null;
-		}
-	});
 
 	/**
 	 * Focuses the input form when an item is created
@@ -193,6 +174,19 @@ j	 */
 	function handleBlur() {
 		isInputFocused = false;
 	}
+
+	onMount(() => {
+		if (isRunning && timer === null) {
+			startTimer();
+		}
+	});
+
+	onDestroy(() => {
+		if (timer !== null) {
+			clearInterval(timer);
+			timer = null;
+		}
+	});
 </script>
 
 <div class="outer">
@@ -201,12 +195,10 @@ j	 */
 			class="name"
 			name="timerName"
 			type="text"
+			on:focus={handleFocus}
 			on:blur={() => {
 				handleBlur();
-				onUpdateName(name);
-			}}
-			on:focus={() => {
-				handleFocus();
+				onChangeName(name);
 			}}
 			bind:value={name}
 			use:blurOnEnter
@@ -219,12 +211,10 @@ j	 */
 			name="timerTime"
 			type="text"
 			disabled={isRunning}
+			on:focus={handleFocus}
 			on:blur={() => {
 				handleBlur();
-				updateDuration();
-			}}
-			on:focus={() => {
-				handleFocus();
+				changeDuration();
 			}}
 			bind:value={displayedTime}
 			use:blurOnEnter
@@ -241,7 +231,7 @@ j	 */
 			symbol={"stop"}
 			margin="0 5px 0 0"
 		/>
-		<CancelButton on:click={remove} margin="0 5px 0 0" />
+		<CancelButton on:click={onDelete} margin="0 5px 0 0" />
 	</div>
 </div>
 

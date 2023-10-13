@@ -1,6 +1,30 @@
+import { writable } from "svelte/store";
+
 const storeKey = 'items';
 
+/**
+ * Represents the timer as it is stored in the local
+ * storage database
+ */
+class TimerItemValue {
+	/**
+	 * @param {string} id
+	 * @param {string} name
+	 * @param {number} duration
+	 * @param {Date|null} started_at
+	 */
+	constructor(id, name, duration, started_at) {
+		this.id = id;
+		this.name = name;
+		this.duration = duration;
+		this.started_at = started_at;
+	}
+}
+
 export class TimerStore {
+	/**
+	 * Creates a TimerStore instance
+	 */
 	constructor() { }
 
 	/**
@@ -8,13 +32,13 @@ export class TimerStore {
 	 */
 	list() {
 		let items = fetchTimerItemsFromStore();
+		updateDurations(items);
 		return items.map(
 			(timer) => {
 				return convertTimerItem(timer);
 			}
 		);
 	}
-
 
 	/**
 	 * @returns {Array<import('$lib/types.js').TimerItem>|null}
@@ -24,7 +48,7 @@ export class TimerStore {
 		let id = generateRandomID();
 		let newTimer = new TimerItemValue(id, `Timer ${items.length + 1}`, 0, null);
 		items.push(newTimer);
-		setItems(JSON.stringify(items));
+		setItems(items);
 		return items.map(
 			(timer) => {
 				return convertTimerItem(timer, timer.id === id);
@@ -39,7 +63,7 @@ export class TimerStore {
 	delete(id) {
 		let items = fetchTimerItemsFromStore();
 		items = items.filter(item => item.id !== id);
-		setItems(JSON.stringify(items));
+		setItems(items);
 		return items.map(
 			(timer) => {
 				return convertTimerItem(timer);
@@ -72,23 +96,6 @@ export class TimerStore {
 		})
 	}
 
-	/**
-	 * @param {number} index1
-	 * @param {number} index2
-	 * Swap two items
-	 */
-	swap(index1, index2) {
-		let timers = fetchTimerItemsFromStore();
-		const temp = timers[index1];
-		timers[index1] = timers[index2];
-		timers[index2] = temp;
-		setItems(JSON.stringify(timers));
-		return timers.map(
-			(timer) => {
-				return convertTimerItem(timer);
-			}
-		);
-	}
 	/**
 	 * @param {string} id
 	 * The timer id.
@@ -123,14 +130,32 @@ export class TimerStore {
 		})
 	}
 
+	/**
+	 * @param {number} index1
+	 * @param {number} index2
+	 * Swap two items
+	 */
+	swap(index1, index2) {
+		let timers = fetchTimerItemsFromStore();
+		const temp = timers[index1];
+		timers[index1] = timers[index2];
+		timers[index2] = temp;
+		setItems(timers);
+		return timers.map(
+			(timer) => {
+				return convertTimerItem(timer);
+			}
+		);
+	}
 }
 
 /**
  * Store the timer items in local storage
- * @param {string} items
+ * @param {TimerItemValue[]} items
  */
 function setItems(items) {
-	localStorage.setItem(storeKey, items);
+	localStorage.setItem(storeKey, JSON.stringify(items));
+	updateDurations(items);
 }
 
 /**
@@ -138,17 +163,6 @@ function setItems(items) {
  */
 function getItems() {
 	return localStorage.getItem(storeKey);
-}
-
-/**
- * @returns {TimerItemValue[]}
- */
-function fetchTimerItemsFromStore() {
-	let items = getItems();
-	if (items !== null) {
-		return JSON.parse(items);
-	}
-	return [];
 }
 
 /**
@@ -163,7 +177,7 @@ function updateTimerItemInStore(id, cb) {
 	);
 	if (index !== -1) {
 		items[index] = cb(items[index]);
-		setItems(JSON.stringify(items));
+		setItems(items);
 		return items.map(
 			(timer) => {
 				return convertTimerItem(timer);
@@ -171,32 +185,6 @@ function updateTimerItemInStore(id, cb) {
 		);
 	}
 	return null;
-}
-
-
-class TimerItemValue {
-	/**
-	 * @param {string} id
-	 * @param {string} name
-	 * @param {number} duration
-	 * @param {Date|null} started_at
-	 */
-	constructor(id, name, duration, started_at) {
-		this.id = id;
-		this.name = name;
-		this.duration = duration;
-		this.started_at = started_at;
-	}
-}
-
-function generateRandomID() {
-	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-	let result = '';
-	for (let i = 0; i < 8; i++) {
-		const randomIndex = Math.floor(Math.random() * characters.length);
-		result += characters.charAt(randomIndex);
-	}
-	return result;
 }
 
 /**
@@ -216,14 +204,55 @@ function convertTimerItem(timer, requestFocus) {
 			).getTime()) /
 		1000
 		: 0;
+	const offsetDuration =
+		timer.duration +
+		sinceStarted;
 	return {
 		id: timer.id,
 		name: timer.name,
 		isRunning: isRunning,
 		duration: 0,
-		offsetDuration:
-			timer.duration +
-			sinceStarted,
+		offsetDuration: offsetDuration,
 		requestFocus: requestFocus,
 	};
+}
+
+/**
+ * @returns {TimerItemValue[]}
+ */
+function fetchTimerItemsFromStore() {
+	let items = getItems();
+	if (items !== null) {
+		return JSON.parse(items);
+	}
+	return [];
+}
+
+/**
+ * @type {import("svelte/store").Writable<Map<String,Number>>}
+ * Stores the current duration of each timer. Required to calculated
+ * the total duration.
+ */
+export const durationsStore = writable(new Map());
+
+/**
+ * Updates the durations map
+ * @param {TimerItemValue[]} items
+ */
+function updateDurations(items) {
+	const durations = new Map(items.map((item) => [item.id, item.duration]));
+	durationsStore.set(durations);
+}
+
+/**
+ * Generates a random sequence of numbers and characters
+ * @returns {String}
+ */
+function generateRandomID() {
+	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'; let result = '';
+	for (let i = 0; i < 8; i++) {
+		const randomIndex = Math.floor(Math.random() * characters.length);
+		result += characters.charAt(randomIndex);
+	}
+	return result;
 }
