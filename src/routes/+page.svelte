@@ -1,10 +1,10 @@
 <script>
 	import TimerItem from "$lib/components/TimerItem.svelte";
-	import { TimerStore } from "$lib/store.js";
+	import { TimerStore, durationsStore } from "$lib/store.js";
 	import { toggleThemeStorage } from "$lib/theme.js";
 	import { AddButton } from "$lib/components/buttons";
 	import { fade, slide } from "svelte/transition";
-	import { onMount } from "svelte";
+	import { onDestroy, onMount } from "svelte";
 	import { DarkIcon, LightIcon } from "$lib/components/icons";
 	import { formatDuration } from "$lib/utils";
 
@@ -106,37 +106,15 @@
 	}
 
 	/**
-	 * A map from id to duration to keep book of
-	 * the total timer duration.
-	 * @type {{ id: string; duration: number; }[]}
+	 * @type {number} the total time
 	 */
-	$: durationsMap = timers.map((timer) => {
-		return {
-			id: timer.id,
-			duration: timer.offsetDuration,
-		};
+	let totalTime;
+	const unsubscribe = durationsStore.subscribe((durations) => {
+		totalTime = Array.from(durations.values()).reduce(
+			(sum, duration) => sum + duration,
+			0
+		);
 	});
-
-	/**
-	 * @param {string} id
-	 * @param {number} duration
-	 * Updates the duration in the durationsMap, not
-	 * in the local storage.
-	 */
-	function updateDurationsMap(id, duration) {
-		const index = durationsMap.findIndex((item) => item.id === id);
-		if (index !== -1) {
-			durationsMap[index].duration = duration;
-		}
-	}
-
-	/**
-	 * @type {number}
-	 */
-	$: totalTime = durationsMap.reduce(
-		(sum, item) => sum + item.duration,
-		0
-	);
 
 	/**
 	 * Toggle the theme.
@@ -231,6 +209,8 @@
 	function handleDragEnter(index) {
 		swapTimers(index);
 	}
+
+	onDestroy(unsubscribe);
 </script>
 
 <div class="header">
@@ -260,6 +240,7 @@
 			<hr class="divider" />
 			<div class="timer-item" transition:slide>
 				<TimerItem
+					id={item.id}
 					name={item.name}
 					duration={item.duration}
 					offsetDuration={item.offsetDuration}
@@ -269,12 +250,10 @@
 					onStart={() => startTimer(item.id)}
 					onPause={() => pauseTimer(item.id)}
 					onReset={() => resetTimer(item.id)}
-					onUpdateName={(name) =>
+					onChangeName={(name) =>
 						updateName(item.id, name)}
-					onUpdateDuration={(d) =>
+					onChangeDuration={(d) =>
 						updateDuration(item.id, d)}
-					onIntervall={(d) =>
-						updateDurationsMap(item.id, d)}
 					bind:isInputFocused
 				/>
 			</div>
