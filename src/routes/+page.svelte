@@ -20,7 +20,7 @@
 	 * Timer items
 	 * @type {import('$lib/types.js').TimerItem[]}
 	 */
-	let timers = data.items.data;
+	let timers = data.items.data ?? [];
 
 	/**
 	 * @type {string}
@@ -32,8 +32,10 @@
 	 * Creates a timer.
 	 */
 	function createTimer() {
-		timers = store.create();
-		console.log(timers);
+		let newTimers = store.create();
+		if (newTimers !== null) {
+			timers = newTimers;
+		}
 	}
 
 	/**
@@ -41,7 +43,10 @@
 	 * Deletes a timer
 	 */
 	function deleteTimer(id) {
-		timers = store.delete(id);
+		let newTimers = store.delete(id);
+		if (newTimers !== null) {
+			timers = newTimers;
+		}
 	}
 
 	/**
@@ -176,7 +181,10 @@
 		const onVisibilityChange = () => {
 			let state = document.visibilityState;
 			if (state == "visible") {
-				timers = store.list();
+				let newTimers = store.list();
+				if (newTimers !== null) {
+					timers = newTimers;
+				}
 			}
 		};
 		document.addEventListener(
