@@ -93,6 +93,7 @@
 			timers = newTimers;
 		}
 	}
+
 	/**
 	 * @param {string} id
 	 * @param {number} duration
@@ -125,6 +126,7 @@
 			theme = newTheme;
 		}
 	}
+
 	/**
 	 * @type {number|null}
 	 */

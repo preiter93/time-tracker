@@ -30,7 +30,7 @@
 	/**
 	 * @type {number}
 	 * The duration in sec.
-j	 */
+	 */
 	export let duration = 0;
 
 	/**
@@ -47,13 +47,13 @@ j	 */
 	/**
 	 * @type {number}
 	 * The total duration
-j	 */
+	 */
 	$: totalDuration = duration + offsetDuration;
 
 	/**
 	 * @type {string}
 	 * The displayed time.
-j	 */
+	 */
 	$: displayedTime = formatDuration(totalDuration);
 
 	/**
@@ -165,6 +165,10 @@ j	 */
 		};
 	}
 
+	/**
+	 * @type {boolean}
+	 * Is true if either the name or the time input field is focused.
+	 */
 	export let isInputFocused = false;
 
 	function handleFocus() {
