@@ -33,11 +33,7 @@ export class TimerStore {
 	list() {
 		let items = fetchTimerItemsFromStore();
 		updateDurations(items);
-		return items.map(
-			(timer) => {
-				return convertTimerItem(timer);
-			}
-		);
+		return items.map(timer => convertTimerItem(timer));
 	}
 
 	/**
@@ -49,11 +45,7 @@ export class TimerStore {
 		let newTimer = new TimerItemValue(id, `Timer ${items.length + 1}`, 0, null);
 		items.push(newTimer);
 		setItems(items);
-		return items.map(
-			(timer) => {
-				return convertTimerItem(timer, timer.id === id);
-			}
-		);
+		return items.map(timer => convertTimerItem(timer, timer.id === id));
 	}
 
 	/**
@@ -64,11 +56,7 @@ export class TimerStore {
 		let items = fetchTimerItemsFromStore();
 		items = items.filter(item => item.id !== id);
 		setItems(items);
-		return items.map(
-			(timer) => {
-				return convertTimerItem(timer);
-			}
-		);
+		return items.map(timer => convertTimerItem(timer));
 	}
 
 	/**
@@ -88,9 +76,7 @@ export class TimerStore {
 	 */
 	pause(id) {
 		return updateTimerItemInStore(id, (item) => {
-			if (item.started_at !== null) {
-				item.duration += (new Date().getTime() - new Date(item.started_at).getTime()) / 1000;
-			}
+			item.duration += elapsedSince(item.started_at);
 			item.started_at = null;
 			return item;
 		})
@@ -131,21 +117,18 @@ export class TimerStore {
 	}
 
 	/**
+	 * Swap timers. Used for drag and drop.
 	 * @param {number} index1
 	 * @param {number} index2
 	 * Swap two items
 	 */
 	swap(index1, index2) {
-		let timers = fetchTimerItemsFromStore();
-		const temp = timers[index1];
-		timers[index1] = timers[index2];
-		timers[index2] = temp;
-		setItems(timers);
-		return timers.map(
-			(timer) => {
-				return convertTimerItem(timer);
-			}
-		);
+		let items = fetchTimerItemsFromStore();
+		const temp = items[index1];
+		items[index1] = items[index2];
+		items[index2] = temp;
+		setItems(items);
+		return items.map(timer => convertTimerItem(timer));
 	}
 }
 
@@ -178,11 +161,7 @@ function updateTimerItemInStore(id, cb) {
 	if (index !== -1) {
 		items[index] = cb(items[index]);
 		setItems(items);
-		return items.map(
-			(timer) => {
-				return convertTimerItem(timer);
-			}
-		);
+		return items.map(timer => convertTimerItem(timer));
 	}
 	return null;
 }
@@ -196,17 +175,9 @@ function convertTimerItem(timer, requestFocus) {
 	const isRunning =
 		timer.started_at !==
 		null;
-	const sinceStarted = timer.started_at !==
-		null
-		? (new Date().getTime() -
-			new Date(
-				timer.started_at
-			).getTime()) /
-		1000
-		: 0;
 	const offsetDuration =
 		timer.duration +
-		sinceStarted;
+		elapsedSince(timer.started_at);
 	return {
 		id: timer.id,
 		name: timer.name,
@@ -216,6 +187,7 @@ function convertTimerItem(timer, requestFocus) {
 		requestFocus: requestFocus,
 	};
 }
+
 
 /**
  * @returns {TimerItemValue[]}
@@ -240,8 +212,18 @@ export const durationsStore = writable(new Map());
  * @param {TimerItemValue[]} items
  */
 function updateDurations(items) {
-	const durations = new Map(items.map((item) => [item.id, item.duration]));
+	const durations = new Map(items.map((item) => [
+		item.id, item.duration + elapsedSince(item.started_at)
+	]));
 	durationsStore.set(durations);
+}
+
+/** Returns the elapsed time since date in seconds
+ * @param {Date | null} date
+ * @returns {Number}
+ */
+function elapsedSince(date) {
+	return date ? (new Date().getTime() - new Date(date).getTime()) / 1000 : 0;
 }
 
 /**
@@ -249,7 +231,8 @@ function updateDurations(items) {
  * @returns {String}
  */
 function generateRandomID() {
-	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'; let result = '';
+	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	let result = '';
 	for (let i = 0; i < 8; i++) {
 		const randomIndex = Math.floor(Math.random() * characters.length);
 		result += characters.charAt(randomIndex);
