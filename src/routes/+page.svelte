@@ -167,10 +167,7 @@
 				}
 			}
 		};
-		document.addEventListener(
-			"visibilitychange",
-			onVisibilityChange
-		);
+		document.addEventListener("visibilitychange", onVisibilityChange);
 	});
 
 	/**
@@ -252,10 +249,8 @@
 					onStart={() => startTimer(item.id)}
 					onPause={() => pauseTimer(item.id)}
 					onReset={() => resetTimer(item.id)}
-					onChangeName={(name) =>
-						updateName(item.id, name)}
-					onChangeDuration={(d) =>
-						updateDuration(item.id, d)}
+					onChangeName={(name) => updateName(item.id, name)}
+					onChangeDuration={(d) => updateDuration(item.id, d)}
 					bind:isInputFocused
 				/>
 			</div>
@@ -266,7 +261,7 @@
 	<div class="spacer" />
 	<div class="row">
 		<AddButton on:click={createTimer} />
-		<p class="text-total-timer">
+		<p class="total-time">
 			Total time:<span class="fixed-width"
 				>{formatDuration(totalTime)}</span
 			>
@@ -330,7 +325,7 @@
 	div.spacer {
 		margin-top: 10px;
 	}
-	.text-total-timer {
+	.total-time {
 		font-size: 1em;
 		margin-right: 10px;
 	}
