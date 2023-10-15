@@ -21,7 +21,7 @@
 	export let margin = "0";
 </script>
 
-<button on:click class={cls} style="margin: {margin};">
+<button on:click class={cls} style="margin: {margin};" data-testid={symbol}>
 	<div class="center">
 		{#if symbol === "play"}
 			<PlayIcon />

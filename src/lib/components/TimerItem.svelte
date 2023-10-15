@@ -193,7 +193,7 @@
 	});
 </script>
 
-<div class="outer">
+<div class="timer">
 	<div>
 		<input
 			class="name"
@@ -230,17 +230,13 @@
 			cls={isRunning ? "action" : "default"}
 			margin="0 10px"
 		/>
-		<ControlButton
-			on:click={reset}
-			symbol={"stop"}
-			margin="0 5px 0 0"
-		/>
+		<ControlButton on:click={reset} symbol={"stop"} margin="0 5px 0 0" />
 		<CancelButton on:click={onDelete} margin="0 5px 0 0" />
 	</div>
 </div>
 
 <style>
-	.outer {
+	.timer {
 		margin: 10px 0;
 		padding: 0px;
 		display: flex;

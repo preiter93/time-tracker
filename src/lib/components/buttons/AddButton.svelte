@@ -2,7 +2,7 @@
 	import { AddIcon } from "$lib/components/icons";
 </script>
 
-<button on:click class="cancel-button">
+<button on:click class="add-button">
 	<div class="row">
 		<div class="center">
 			<AddIcon />
