@@ -299,6 +299,7 @@
 		color: var(--bg-secondary);
 		border-radius: 2rem;
 		margin-right: 10px;
+		box-shadow: 0px 0px 12px var(--bg-secondary);
 	}
 	@media (hover: hover) {
 		.theme-btn:hover {
