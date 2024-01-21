@@ -17,8 +17,6 @@
 		--dark-gray: #1e293b;
 		--black: #020617;
 		--white: #f1f5f9;
-		--action-red: #c30101;
-		--turquoise: #1f7a8c;
 		--dark-blue: #1e293b;
 	}
 	:global(h1, p, input[type="text"]) {
@@ -42,7 +40,7 @@
 		--text-primary: var(--black);
 		--btn-primary: var(--black);
 		--btn-secondary: var(--white);
-		--btn-action: var(--action-red);
+		--btn-action: var(--dark-purple);
 	}
 
 	:global(.dark) {
