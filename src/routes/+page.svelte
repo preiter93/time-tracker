@@ -149,7 +149,7 @@
 	 * Set default theme to light.
 	 */
 	onMount(() => {
-		theme = getInitialTheme();
+		theme = getInitialTheme() ?? "dark";
 
 		/**
 		 * We need to resynchronize the timers with the
@@ -213,7 +213,7 @@
 <div class="header">
 	<h1 class="title">Time Tracker</h1>
 	<button on:click={toggleTheme} class="theme-btn">
-		<div class="center" in:fade>
+		<div class="icon" in:fade>
 			{#if theme === "dark"}
 				<LightIcon />
 			{:else}
@@ -304,7 +304,7 @@
 			transform: scale(0.85);
 		}
 	}
-	.center {
+	.icon {
 		display: flex;
 		justify-content: center;
 	}
