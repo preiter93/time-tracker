@@ -1,7 +1,7 @@
 <script>
 	import TimerItem from "$lib/components/TimerItem.svelte";
 	import { TimerStore, durationsStore } from "$lib/store.js";
-	import { toggleThemeStorage } from "$lib/theme.js";
+	import { toggleThemeStorage, getInitialTheme } from "$lib/theme.js";
 	import { AddButton } from "$lib/components/buttons";
 	import { fade, slide } from "svelte/transition";
 	import { onDestroy, onMount } from "svelte";
@@ -149,9 +149,7 @@
 	 * Set default theme to light.
 	 */
 	onMount(() => {
-		let defaultTheme = "dark";
-		document.body.className = defaultTheme;
-		theme = defaultTheme;
+		theme = getInitialTheme();
 
 		/**
 		 * We need to resynchronize the timers with the

@@ -10,12 +10,16 @@
 
 <style>
 	:root {
+		--dark-purple-tw: #4a044e;
 		--dark-purple: #691c52;
 		--light-purple: #913175;
 		--light-gray: #e9e8e8;
-		--dark-gray: #20262e;
+		--dark-gray: #1e293b;
+		--black: #020617;
+		--white: #f1f5f9;
 		--action-red: #c30101;
 		--turquoise: #1f7a8c;
+		--dark-blue: #1e293b;
 	}
 	:global(h1, p, input[type="text"]) {
 		font-family: "Raleway", sans-serif;
@@ -31,18 +35,18 @@
 	}
 
 	:global(.light) {
-		--bg-header: var(--turquoise);
-		--text-header: white;
-		--bg-primary: white;
-		--bg-secondary: black;
-		--text-primary: black;
-		--btn-primary: black;
-		--btn-secondary: white;
+		--bg-header: var(--dark-blue);
+		--text-header: var(--white);
+		--bg-primary: var(--white);
+		--bg-secondary: var(--black);
+		--text-primary: var(--black);
+		--btn-primary: var(--black);
+		--btn-secondary: var(--white);
 		--btn-action: var(--action-red);
 	}
 
 	:global(.dark) {
-		--bg-header: black;
+		--bg-header: var(--black);
 		--text-header: var(--dark-purple);
 		--bg-primary: var(--dark-gray);
 		--bg-secondary: var(--dark-purple);
