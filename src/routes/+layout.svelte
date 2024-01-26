@@ -40,7 +40,7 @@
 		--text-primary: var(--black);
 		--btn-primary: var(--black);
 		--btn-secondary: var(--white);
-		--btn-action: var(--dark-purple);
+		--btn-action: var(--dark-blue);
 	}
 
 	:global(.dark) {
