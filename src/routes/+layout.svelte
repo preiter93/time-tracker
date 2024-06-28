@@ -14,6 +14,7 @@
 		--dark-purple: #691c52;
 		--light-purple: #913175;
 		--light-gray: #e9e8e8;
+		--gray: #d1d0d0;
 		--dark-gray: #1e293b;
 		--black: #020617;
 		--white: #f1f5f9;
@@ -45,12 +46,12 @@
 
 	:global(.dark) {
 		--bg-header: var(--black);
-		--text-header: var(--dark-purple);
+		--text-header: var(--gray);
 		--bg-primary: var(--dark-gray);
-		--bg-secondary: var(--dark-purple);
+		--bg-secondary: var(--dark);
 		--text-primary: var(--light-gray);
-		--btn-primary: var(--light-gray);
-		--btn-secondary: var(--dark-purple);
+		--btn-primary: var(--gray);
+		--btn-secondary: var(--black);
 		--btn-action: var(--light-gray);
 	}
 </style>
