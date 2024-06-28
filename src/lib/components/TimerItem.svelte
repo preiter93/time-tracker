@@ -218,9 +218,9 @@
 	});
 </script>
 
-<div class="timer">
+<div class="timer-item">
 	<button onclick={onToggleExpanded} class="chevron">
-		<div class="center">
+		<div>
 			<svg
 				class="chevron {isExpanded ? 'up' : 'down'}"
 				xmlns="http://www.w3.org/2000/svg"
@@ -231,23 +231,21 @@
 			</svg>
 		</div>
 	</button>
-	<div class="timerTitle">
+	<input
+		type="text"
+		class="timer-name"
+		onfocus={handleFocus}
+		onblur={() => {
+			handleBlur();
+			onChangeName(name);
+		}}
+		bind:value={name}
+		use:blurOnEnter
+		use:focusOnInit
+	/>
+	<div class="inner-row">
 		<input
-			type="text"
-			class="timerInput"
-			onfocus={handleFocus}
-			onblur={() => {
-				handleBlur();
-				onChangeName(name);
-			}}
-			bind:value={name}
-			use:blurOnEnter
-			use:focusOnInit
-		/>
-	</div>
-	<div class="row">
-		<input
-			class="timerTime"
+			class="timer-time"
 			type="text"
 			disabled={isRunning}
 			onfocus={handleFocus}
@@ -286,34 +284,29 @@
 {/if}
 
 <style>
-	.timer {
+	.timer-item {
 		margin: 10px 0;
-		padding: 0px;
-		display: flex;
-		justify-content: space-between;
 		align-items: center;
+		display: flex;
 	}
-	input[type="text"] {
+	.timer-name {
+		font-size: 20px;
+		width: 100%;
+		border: none;
+		background-color: transparent;
+	}
+	.inner-row {
+		display: flex;
+	}
+	.timer-time {
+		width: 90px;
+		text-align: right;
 		font-size: 20px;
 		border: none;
 		background-color: transparent;
 	}
-	.timerTitle {
-		width: 100%;
-		margin-left: 0px;
-	}
-	.timerTime {
-		width: 90px;
-		text-align: right;
-	}
-	.row {
-		display: flex;
-		align-items: center;
-	}
 	.notes {
 		padding: 0px 10px 10px 10px;
-		display: flex;
-		flex-direction: column;
 	}
 	.notes.textarea {
 		padding: 5px;
@@ -321,7 +314,7 @@
 		height: 100px;
 		box-sizing: border-box;
 		resize: vertical;
-		font-size: 14px;
+		font-size: 16px;
 		background-color: var(--bg-primary);
 		border-color: var(--bg-secondary);
 	}
@@ -342,9 +335,5 @@
 	}
 	.chevron.up {
 		transform: rotate(180deg);
-	}
-	.center {
-		display: flex;
-		justify-content: center;
 	}
 </style>

@@ -258,7 +258,7 @@
 			on:drop|preventDefault
 		>
 			<hr class="divider" />
-			<div class="timer-item" transition:slide>
+			<div class="timer" transition:slide>
 				<TimerItem
 					id={item.id}
 					bind:name={item.name}
@@ -335,7 +335,7 @@
 		display: flex;
 		justify-content: center;
 	}
-	.timer-item {
+	.timer {
 		background-color: var(--bg-primary);
 		padding: 1px 0px;
 	}

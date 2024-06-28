@@ -12,13 +12,13 @@ test('happy path', async ({ page }) => {
 	await page.click('.add-button');
 
 	// Count the number of timers
-	const timers = page.locator('.timer');
+	const timers = page.locator('.timer-item');
 	expect(await timers.count()).toBe(1);
 	let firstTimer = timers.first();
 
 	// Timer name and times are displayed correctly
-	const firstTimerName = firstTimer.locator('.timerInput');
-	const firstTimerTime = firstTimer.locator('.timerTime');
+	const firstTimerName = firstTimer.locator('.timer-name');
+	const firstTimerTime = firstTimer.locator('.timer-time');
 	const totalTime = page.locator('.total-time');
 	await expect(firstTimerName).toHaveValue('Timer 1');
 	await expect(firstTimerTime).toHaveValue('00:00:00');
@@ -37,8 +37,8 @@ test('happy path', async ({ page }) => {
 	await page.click('.add-button');
 	expect(await timers.count()).toBe(2);
 	let secondTimer = timers.last();
-	const secondTimerName = secondTimer.locator('.timerInput');
-	const secondTimerTime = secondTimer.locator('.timerTime');
+	const secondTimerName = secondTimer.locator('.timer-name');
+	const secondTimerTime = secondTimer.locator('.timer-time');
 	await expect(secondTimerName).toHaveValue('Timer 2');
 
 	// Update the time of timer 2
