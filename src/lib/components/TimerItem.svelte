@@ -194,10 +194,8 @@
 </script>
 
 <div class="timer">
-	<div>
+	<div class="title">
 		<input
-			class="name"
-			name="timerName"
 			type="text"
 			on:focus={handleFocus}
 			on:blur={() => {
@@ -212,7 +210,6 @@
 	<div class="row">
 		<input
 			class="time"
-			name="timerTime"
 			type="text"
 			disabled={isRunning}
 			on:focus={handleFocus}
@@ -244,13 +241,13 @@
 		align-items: center;
 	}
 	input[type="text"] {
+		width: 100%;
 		font-size: 20px;
 		border: none;
 		background-color: transparent;
 	}
-	.name {
+	.title {
 		width: 95%;
-		max-width: 400px;
 		margin-left: 5px;
 	}
 	.time {

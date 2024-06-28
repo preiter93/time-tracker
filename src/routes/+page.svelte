@@ -113,7 +113,7 @@
 	const unsubscribe = durationsStore.subscribe((durations) => {
 		totalTime = Array.from(durations.values()).reduce(
 			(sum, duration) => sum + duration,
-			0
+			0,
 		);
 	});
 
@@ -256,7 +256,7 @@
 		</div>
 	{/each}
 	<hr class="divider" />
-	<div class="spacer" />
+	<div class="spacer"></div>
 	<div class="row">
 		<AddButton on:click={createTimer} />
 		<p class="total-time">
