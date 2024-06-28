@@ -320,8 +320,8 @@
 		height: 45px;
 		width: 45px;
 		border: none;
-		background: var(--bg-primary);
-		color: var(--bg-secondary);
+		background: var(--bg-header);
+		color: var(--text-header);
 		border-radius: 2rem;
 		margin-right: 10px;
 	}
