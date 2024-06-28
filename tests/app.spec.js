@@ -1,3 +1,4 @@
+// npx playwright test--ui
 import { test, expect } from '@playwright/test';
 
 test('happy path', async ({ page }) => {
@@ -16,8 +17,8 @@ test('happy path', async ({ page }) => {
 	let firstTimer = timers.first();
 
 	// Timer name and times are displayed correctly
-	const firstTimerName = firstTimer.locator('.name');
-	const firstTimerTime = firstTimer.locator('.time');
+	const firstTimerName = firstTimer.locator('.timerInput');
+	const firstTimerTime = firstTimer.locator('.timerTime');
 	const totalTime = page.locator('.total-time');
 	await expect(firstTimerName).toHaveValue('Timer 1');
 	await expect(firstTimerTime).toHaveValue('00:00:00');
@@ -36,8 +37,8 @@ test('happy path', async ({ page }) => {
 	await page.click('.add-button');
 	expect(await timers.count()).toBe(2);
 	let secondTimer = timers.last();
-	const secondTimerName = secondTimer.locator('.name');
-	const secondTimerTime = secondTimer.locator('.time');
+	const secondTimerName = secondTimer.locator('.timerInput');
+	const secondTimerTime = secondTimer.locator('.timerTime');
 	await expect(secondTimerName).toHaveValue('Timer 2');
 
 	// Update the time of timer 2

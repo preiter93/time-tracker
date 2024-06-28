@@ -3,6 +3,7 @@
 	import { ControlButton, CancelButton } from "$lib/components/buttons";
 	import { formatDuration, parseTime } from "$lib/utils";
 	import { durationsStore } from "$lib/store";
+	import { slide } from "svelte/transition";
 
 	/**
 	 * @type {number | null} timer
@@ -43,6 +44,18 @@
 	 * Request focus of the input form.
 	 */
 	export let requestFocus = false;
+
+	/**
+	 * @type {boolean}
+	 * Whether the item is expanded.
+	 */
+	export let isExpanded = false;
+
+	/**
+	 * @type {string}
+	 * The timers notes.
+	 */
+	export let notes = "";
 
 	/**
 	 * @type {number}
@@ -91,6 +104,18 @@
 	 * Callback invoked on time change
 	 */
 	export let onChangeDuration;
+
+	/**
+	 * @type {function(string):void}
+	 * Callback invoked on notes changes
+	 */
+	export let onChangeNotes;
+
+	/**
+	 * @type {function():void}
+	 * Callback invoked when the expanded button is togglend
+	 */
+	export let onToggleExpanded;
 
 	function start() {
 		startTimer();
@@ -194,11 +219,24 @@
 </script>
 
 <div class="timer">
-	<div class="title">
+	<button onclick={onToggleExpanded} class="chevron">
+		<div class="center">
+			<svg
+				class="chevron {isExpanded ? 'up' : 'down'}"
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 24 24"
+			>
+				<path d="M12 15L6 9H18L12 15Z" fill="currentColor" />
+				>
+			</svg>
+		</div>
+	</button>
+	<div class="timerTitle">
 		<input
 			type="text"
-			on:focus={handleFocus}
-			on:blur={() => {
+			class="timerInput"
+			onfocus={handleFocus}
+			onblur={() => {
 				handleBlur();
 				onChangeName(name);
 			}}
@@ -209,11 +247,11 @@
 	</div>
 	<div class="row">
 		<input
-			class="time"
+			class="timerTime"
 			type="text"
 			disabled={isRunning}
-			on:focus={handleFocus}
-			on:blur={() => {
+			onfocus={handleFocus}
+			onblur={() => {
 				handleBlur();
 				changeDuration();
 			}}
@@ -232,6 +270,21 @@
 	</div>
 </div>
 
+{#if isExpanded}
+	<div class="notes" transition:slide={{ duration: 300 }}>
+		<textarea
+			class="notes textarea"
+			bind:value={notes}
+			placeholder="Enter some text"
+			onfocus={handleFocus}
+			onblur={() => {
+				handleBlur();
+				onChangeNotes(notes);
+			}}
+		></textarea>
+	</div>
+{/if}
+
 <style>
 	.timer {
 		margin: 10px 0;
@@ -241,21 +294,57 @@
 		align-items: center;
 	}
 	input[type="text"] {
-		width: 100%;
 		font-size: 20px;
 		border: none;
 		background-color: transparent;
 	}
-	.title {
-		width: 95%;
-		margin-left: 5px;
+	.timerTitle {
+		width: 100%;
+		margin-left: 0px;
 	}
-	.time {
+	.timerTime {
 		width: 90px;
 		text-align: right;
 	}
 	.row {
 		display: flex;
 		align-items: center;
+	}
+	.notes {
+		padding: 0px 10px 10px 10px;
+		display: flex;
+		flex-direction: column;
+	}
+	.notes.textarea {
+		padding: 5px;
+		width: 100%;
+		height: 100px;
+		box-sizing: border-box;
+		resize: vertical;
+		font-size: 14px;
+		background-color: var(--bg-primary);
+		border-color: var(--bg-secondary);
+	}
+	.chevron {
+		align-items: center;
+		justify-content: center;
+		display: flex;
+		width: 28px;
+		height: 28px;
+		fill: currentColor;
+		transition: transform 0.3s ease;
+		margin: 0px 5px 0px 5px;
+		background-color: transparent;
+		border: none;
+	}
+	.chevron.down {
+		transform: rotate(0deg);
+	}
+	.chevron.up {
+		transform: rotate(180deg);
+	}
+	.center {
+		display: flex;
+		justify-content: center;
 	}
 </style>

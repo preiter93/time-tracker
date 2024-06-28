@@ -107,6 +107,29 @@
 	}
 
 	/**
+	 * @param {string} id
+	 * @param {string} notes
+	 * Invoked on notes change.
+	 */
+	function updateNotes(id, notes) {
+		let newTimers = store.updateNotes(id, notes);
+		if (newTimers !== null) {
+			timers = newTimers;
+		}
+	}
+
+	/**
+	 * @param {string} id
+	 * Invoked when the item gets expanded
+	 */
+	function toggleExpanded(id) {
+		let newTimers = store.toggleExpanded(id);
+		if (newTimers !== null) {
+			timers = newTimers;
+		}
+	}
+
+	/**
 	 * @type {number} the total time
 	 */
 	let totalTime;
@@ -238,10 +261,12 @@
 			<div class="timer-item" transition:slide>
 				<TimerItem
 					id={item.id}
-					name={item.name}
-					duration={item.duration}
-					offsetDuration={item.offsetDuration}
-					isRunning={item.isRunning}
+					bind:name={item.name}
+					bind:duration={item.duration}
+					bind:offsetDuration={item.offsetDuration}
+					bind:isRunning={item.isRunning}
+					bind:isExpanded={item.isExpanded}
+					bind:notes={item.notes}
 					requestFocus={item.requestFocus}
 					onDelete={() => deleteTimer(item.id)}
 					onStart={() => startTimer(item.id)}
@@ -249,6 +274,8 @@
 					onReset={() => resetTimer(item.id)}
 					onChangeName={(name) => updateName(item.id, name)}
 					onChangeDuration={(d) => updateDuration(item.id, d)}
+					onChangeNotes={(notes) => updateNotes(item.id, notes)}
+					onToggleExpanded={() => toggleExpanded(item.id)}
 					bind:isInputFocused
 				/>
 			</div>

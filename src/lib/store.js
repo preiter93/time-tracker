@@ -12,12 +12,16 @@ class TimerItemValue {
 	 * @param {string} name
 	 * @param {number} duration
 	 * @param {Date|null} started_at
+	 * @param {string} notes
+	 * @param {boolean} isExpanded
 	 */
-	constructor(id, name, duration, started_at) {
+	constructor(id, name, duration, started_at, notes, isExpanded) {
 		this.id = id;
 		this.name = name;
 		this.duration = duration;
 		this.started_at = started_at;
+		this.notes = notes;
+		this.isExpanded = isExpanded;
 	}
 }
 
@@ -42,7 +46,7 @@ export class TimerStore {
 	create() {
 		let items = fetchTimerItemsFromStore();
 		let id = generateRandomID();
-		let newTimer = new TimerItemValue(id, `Timer ${items.length + 1}`, 0, null);
+		let newTimer = new TimerItemValue(id, `Timer ${items.length + 1}`, 0, null, "", false);
 		items.push(newTimer);
 		setItems(items);
 		return items.map(timer => convertTimerItem(timer, timer.id === id));
@@ -101,6 +105,27 @@ export class TimerStore {
 	updateName(id, name) {
 		return updateTimerItemInStore(id, (item) => {
 			item.name = name;
+			return item;
+		})
+	}
+
+	/**
+	 * @param {string} id
+	 * @param {string} notes
+	 */
+	updateNotes(id, notes) {
+		return updateTimerItemInStore(id, (item) => {
+			item.notes = notes;
+			return item;
+		})
+	}
+
+	/**
+	 * @param {string} id
+	 */
+	toggleExpanded(id) {
+		return updateTimerItemInStore(id, (item) => {
+			item.isExpanded = !item.isExpanded;
 			return item;
 		})
 	}
@@ -185,6 +210,8 @@ function convertTimerItem(timer, requestFocus) {
 		duration: 0,
 		offsetDuration: offsetDuration,
 		requestFocus: requestFocus,
+		notes: timer.notes,
+		isExpanded: timer.isExpanded,
 	};
 }
 

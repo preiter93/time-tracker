@@ -19,7 +19,7 @@
 		--white: #f1f5f9;
 		--dark-blue: #1e293b;
 	}
-	:global(h1, p, input[type="text"]) {
+	:global(h1, p, input[type="text"], textarea) {
 		font-family: "Raleway", sans-serif;
 	}
 	:global(body) {
@@ -28,7 +28,7 @@
 		padding: 0;
 	}
 
-	:global(p, input[type="text"]) {
+	:global(p, input[type="text"], textarea) {
 		color: var(--text-primary);
 	}
 
