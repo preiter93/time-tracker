@@ -311,7 +311,7 @@
 	}
 	.title {
 		text-align: center;
-		font-size: 2.4em;
+		font-size: 2em;
 		flex: 1;
 		margin-left: 20px;
 	}
