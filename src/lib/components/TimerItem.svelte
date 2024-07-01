@@ -226,7 +226,11 @@
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 24 24"
 			>
-				<path d="M12 15L6 9H18L12 15Z" fill="currentColor" />
+				<path
+					class="chevron path"
+					d="M12 15L6 9H18L12 15Z"
+					fill="currentColor"
+				/>
 				>
 			</svg>
 		</div>
@@ -324,7 +328,7 @@
 		display: flex;
 		width: 28px;
 		height: 28px;
-		fill: currentColor;
+		fill: var(--text-primary);
 		transition: transform 0.3s ease;
 		margin: 0px 5px 0px 5px;
 		background-color: transparent;
