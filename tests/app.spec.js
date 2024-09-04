@@ -1,4 +1,4 @@
-// npx playwright test--ui
+// npx playwright test --ui
 import { test, expect } from '@playwright/test';
 
 test('happy path', async ({ page }) => {
