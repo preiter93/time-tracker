@@ -10,8 +10,6 @@
 
 <style>
 	:root {
-		--dark-purple-tw: #4a044e;
-		--dark-purple: #691c52;
 		--light-purple: #913175;
 		--light-gray: #e9e8e8;
 		--gray: #d1d0d0;
