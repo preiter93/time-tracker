@@ -160,28 +160,30 @@
 	}
 
 	.navbar {
-		padding: 0rem;
-		background-color: var(--bg-header);
+		display: flex;
+        gap: 1rem;
+        background-color: var(--bg-header);
+        padding: 1rem;
 	}
 
 	.sections {
 		display: flex;
-		gap: 1.5rem;
+		gap: 2.0rem;
 	}
 
 	.section {
-		text-decoration: none;
-		font-size: 1rem;
-		color: var(--fg-header);
-		padding: 0.75rem;
-        font-size: 18px;
+		display: inline-block;
+        text-decoration: none;
+        color: var(--fg-header);
+        padding: 0.3rem 0.2rem;
+		font-size: 18px;
 	}
+
 	.section.active {
-		color: var(--fg-header);
-		background-color: var(--bg-header);
-		font-weight: 900;
-		font-style: bold;
+		font-weight: 700;
+		border-bottom: 2px solid var(--white);
 	}
+
 	@media (hover: hover) {
 		.section.inactive:hover {
 			cursor: pointer;
