@@ -126,6 +126,7 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		height: 50px;
 	}
 	.title {
 		text-align: center;
@@ -162,7 +163,6 @@
 	.navbar {
 		display: flex;
         gap: 1rem;
-        background-color: var(--bg-header);
         padding: 1rem;
 	}
 
