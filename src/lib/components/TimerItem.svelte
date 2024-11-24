@@ -16,7 +16,7 @@
 	 * @property {number} offsetDuration
 	 * @property {number} duration
 	 * @property {boolean} isRunning
-	 * @property {boolean} requestFocus
+	 * @property {boolean | undefined} requestFocus
 	 * @property {boolean} isExpanded
 	 * @property {boolean} isInputFocused
 	 * @property {string} notes
@@ -56,7 +56,6 @@
 	 * @property {number} value - the total duration in seconds.
 	 * @property {string} display - a formatted string of the duration.
 	 */
-
 	/** @type {TotalDuration} */
 	let totalDuration = $derived({
 		value: duration + offsetDuration,
@@ -84,8 +83,11 @@
 		onReset();
 	}
 
-	function changeDuration() {
-		let duration = parseTime(totalDuration.display);
+	/**
+	 * @param {string} value
+	 */
+	function changeDuration(value) {
+		let duration = parseTime(value);
 		if (duration !== null) {
 			onChangeDuration(duration);
 		}
@@ -195,11 +197,11 @@
 			type="text"
 			disabled={isRunning}
 			onfocus={handleFocus}
-			onblur={() => {
+			onblur={(/** @type {{ target: { value: string; }; }} */ event) => {
 				handleBlur();
-				changeDuration();
+				changeDuration(event.target.value);
 			}}
-			bind:value={totalDuration.display}
+			value={totalDuration.display}
 			use:blurOnEnter
 			use:focusOnInit
 		/>
