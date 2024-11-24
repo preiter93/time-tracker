@@ -1,4 +1,5 @@
 <script>
+	import { page } from '$app/stores';
 	import { toggleThemeStorage, getInitialTheme } from "$lib/theme.js";
 	import { fade } from "svelte/transition";
 	import { onMount } from "svelte";
@@ -28,28 +29,46 @@
 	onMount(() => {
 		theme = getInitialTheme() ?? "dark";
 	});
+
+	const sections = [
+		{ name: '⏱  Timers', href: '/' },
+		{ name: '✔ Todos', href: '/todos' }
+	];
+
 </script>
 
 <div class="header">
-	<!-- <nav> -->
-	<!-- 	<a href="/">Timers</a> -->
-	<!-- 	<a href="/todos">Todos</a> -->
-	<!-- </nav> -->
-	<h1 class="title">Time Tracker</h1>
-	<button onclick={toggleTheme} class="theme-btn">
-		<div class="icon" in:fade>
-			{#if theme === "dark"}
-				<LightIcon />
-			{:else}
-				<DarkIcon />
-			{/if}
-		</div>
-	</button>
+	<div>
+		<nav class="navbar">
+			<div class="sections">
+				{#each sections as section}
+					<a 
+						href={section.href}
+						class={`section ${$page.url.pathname === section.href ? 'active' : 'inactive'}`}
+					>
+						{section.name}
+					</a>
+				{/each}
+			</div>
+		</nav>
+	</div>
+	<!-- <h1 class="title">Time Tracker</h1> -->
+	<div class="theme-button">
+		<button onclick={toggleTheme} class="theme-btn">
+			<div class="icon" in:fade>
+				{#if theme === "dark"}
+					<LightIcon />
+				{:else}
+					<DarkIcon />
+				{/if}
+			</div>
+		</button>
+	</div>
 </div>
 {@render children()}
 <svelte:head>
 	<style>
-		@import url("https://fonts.googleapis.com/css?family=Raleway&display=swap");
+		@import url("https://fonts.googleapis.com/css?family=Raleway:400,700&display=swap");
 	</style>
 </svelte:head>
 
@@ -64,6 +83,9 @@
 		--dark-blue: #1e293b;
 	}
 	:global(h1, p, input[type="text"], textarea) {
+		font-family: "Raleway", sans-serif;
+	}
+	:global(a, p, input[type="text"], textarea) {
 		font-family: "Raleway", sans-serif;
 	}
 	:global(body) {
@@ -100,7 +122,7 @@
 	.header {
 		color: var(--text-header);
 		background-color: var(--bg-header);
-		padding: 1px 5px;
+		padding: 5px 5px;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
@@ -110,6 +132,11 @@
 		font-size: 2em;
 		flex: 1;
 		margin-left: 20px;
+	}
+	.theme-button {
+		display: flex;
+		justify-content: flex-end;
+		text-align: right;
 	}
 	.theme-btn {
 		padding: 0;
@@ -130,5 +157,35 @@
 	.icon {
 		display: flex;
 		justify-content: center;
+	}
+
+	.navbar {
+		padding: 0rem;
+		background-color: var(--bg-header);
+	}
+
+	.sections {
+		display: flex;
+		gap: 1.5rem;
+	}
+
+	.section {
+		text-decoration: none;
+		font-size: 1rem;
+		color: var(--fg-header);
+		padding: 0.75rem;
+        font-size: 18px;
+	}
+	.section.active {
+		color: var(--fg-header);
+		background-color: var(--bg-header);
+		font-weight: 900;
+		font-style: bold;
+	}
+	@media (hover: hover) {
+		.section.inactive:hover {
+			cursor: pointer;
+			transform: scale(0.85);
+		}
 	}
 </style>
