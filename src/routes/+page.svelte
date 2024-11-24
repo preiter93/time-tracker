@@ -4,7 +4,7 @@
 	import { fade } from "svelte/transition";
 	import { onDestroy, onMount } from "svelte";
 	import { DarkIcon, LightIcon } from "$lib/components/icons";
-	import Timers from "$lib/TimerTab.svelte";
+	import Timers from "$lib/TimerPage.svelte";
 
 	/** @type {import('./$types').PageData} */
 	export let data;

@@ -9,113 +9,61 @@
 	 * @type {number | null} timer
 	 */
 	let timer = null;
+	/**
+	 * @typedef Props
+	 * @property {string} id
+	 * @property {string} name
+	 * @property {number} offsetDuration
+	 * @property {number} duration
+	 * @property {boolean} isRunning
+	 * @property {boolean} requestFocus
+	 * @property {boolean} isExpanded
+	 * @property {boolean} isInputFocused
+	 * @property {string} notes
+	 * @property {function():void} onDelete
+	 * @property {function():void} onStart
+	 * @property {function():void} onReset
+	 * @property {function():void} onPause
+	 * @property {function(string):void} onChangeNotes
+	 * @property {function(string):void} onChangeName
+	 * @property {function(number):void} onChangeDuration
+	 * @property {function():void} onToggleExpanded
+	 */
+
+	/** @type {Props} */
+	let {
+		id,
+		name = $bindable(),
+		offsetDuration = $bindable(0),
+		duration = $bindable(0),
+		isRunning = $bindable(false),
+		requestFocus = false,
+		isExpanded = $bindable(false),
+		notes = $bindable(""),
+		isInputFocused = $bindable(false),
+		onDelete,
+		onStart,
+		onReset,
+		onPause,
+		onChangeDuration,
+		onChangeNotes,
+		onChangeName,
+		onToggleExpanded,
+	} = $props();
 
 	/**
-	 * @type {string}
-	 * The timer id.
+	 * @typedef {Object} TotalDuration
+	 * @property {number} value - the total duration in seconds.
+	 * @property {string} display - a formatted string of the duration.
 	 */
-	export let id;
 
-	/**
-	 * @type {string}
-	 * The display name.
-	 */
-	export let name;
-
-	/**
-	 * @type {number}
-	 * The duration offset in sec.
-	 */
-	export let offsetDuration = 0;
-
-	/**
-	 * @type {number}
-	 * The duration in sec.
-	 */
-	export let duration = 0;
-
-	/**
-	 * @type {boolean}
-	 */
-	export let isRunning = false;
-
-	/**
-	 * @type {boolean}
-	 * Request focus of the input form.
-	 */
-	export let requestFocus = false;
-
-	/**
-	 * @type {boolean}
-	 * Whether the item is expanded.
-	 */
-	export let isExpanded = false;
-
-	/**
-	 * @type {string}
-	 * The timers notes.
-	 */
-	export let notes = "";
-
-	/**
-	 * @type {number}
-	 * The total duration
-	 */
-	$: totalDuration = duration + offsetDuration;
-
-	/**
-	 * @type {string}
-	 * The displayed time.
-	 */
-	$: displayedTime = formatDuration(totalDuration);
-
-	/**
-	 * @type {function():void}
-	 * Callback invoked on delete.
-	 */
-	export let onDelete;
-
-	/**
-	 * @type {function():void}
-	 * Callback invoked on start.
-	 */
-	export let onStart;
-
-	/**
-	 * @type {function():void}
-	 * Callback invoked on pause.
-	 */
-	export let onPause;
-
-	/**
-	 * @type {function():void}
-	 * Callback invoked on reset.
-	 */
-	export let onReset;
-
-	/**
-	 * @type {function(string):void}
-	 * Callback invoked on name changes
-	 */
-	export let onChangeName;
-
-	/**
-	 * @type {function(number):void}
-	 * Callback invoked on time change
-	 */
-	export let onChangeDuration;
-
-	/**
-	 * @type {function(string):void}
-	 * Callback invoked on notes changes
-	 */
-	export let onChangeNotes;
-
-	/**
-	 * @type {function():void}
-	 * Callback invoked when the expanded button is togglend
-	 */
-	export let onToggleExpanded;
+	/** @type {TotalDuration} */
+	let totalDuration = $derived({
+		value: duration + offsetDuration,
+		get display() {
+			return formatDuration(this.value);
+		},
+	});
 
 	function start() {
 		startTimer();
@@ -137,7 +85,7 @@
 	}
 
 	function changeDuration() {
-		let duration = parseTime(displayedTime);
+		let duration = parseTime(totalDuration.display);
 		if (duration !== null) {
 			onChangeDuration(duration);
 		}
@@ -146,7 +94,7 @@
 	function startTimer() {
 		timer = setInterval(() => {
 			durationsStore.update((value) => {
-				return value.set(id, totalDuration + 1);
+				return value.set(id, totalDuration.value + 1);
 			});
 			duration += 1;
 		}, 1000);
@@ -189,12 +137,6 @@
 			},
 		};
 	}
-
-	/**
-	 * @type {boolean}
-	 * Is true if either the name or the time input field is focused.
-	 */
-	export let isInputFocused = false;
 
 	function handleFocus() {
 		isInputFocused = true;
@@ -257,7 +199,7 @@
 				handleBlur();
 				changeDuration();
 			}}
-			bind:value={displayedTime}
+			bind:value={totalDuration.display}
 			use:blurOnEnter
 			use:focusOnInit
 		/>
