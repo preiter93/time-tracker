@@ -1,30 +1,23 @@
 <script>
-	import { durationsStore } from "$lib/store.js";
 	import { toggleThemeStorage, getInitialTheme } from "$lib/theme.js";
 	import { fade } from "svelte/transition";
-	import { onDestroy, onMount } from "svelte";
+	import { onMount } from "svelte";
 	import { DarkIcon, LightIcon } from "$lib/components/icons";
 	import Timers from "$lib/TimerPage.svelte";
 
-	/** @type {import('./$types').PageData} */
-	export let data;
+	/**
+	 * @typedef Props
+	 * @property {import('./$types').PageData} data
+	 */
+
+	/** @type {Props} */
+	let { data } = $props();
 
 	/**
 	 * @type {string}
 	 * The theme (light/dark)
 	 */
-	let theme;
-
-	/**
-	 * @type {number} the total time
-	 */
-	let totalTime;
-	const unsubscribe = durationsStore.subscribe((durations) => {
-		totalTime = Array.from(durations.values()).reduce(
-			(sum, duration) => sum + duration,
-			0,
-		);
-	});
+	let theme = $state("");
 
 	/**
 	 * Toggle the theme.
@@ -42,13 +35,11 @@
 	onMount(() => {
 		theme = getInitialTheme() ?? "dark";
 	});
-
-	onDestroy(unsubscribe);
 </script>
 
 <div class="header">
 	<h1 class="title">Time Tracker</h1>
-	<button on:click={toggleTheme} class="theme-btn">
+	<button onclick={toggleTheme} class="theme-btn">
 		<div class="icon" in:fade>
 			{#if theme === "dark"}
 				<LightIcon />

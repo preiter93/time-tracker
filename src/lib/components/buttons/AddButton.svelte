@@ -1,8 +1,15 @@
 <script>
 	import { AddIcon } from "$lib/components/icons";
+
+	/**
+	 * @typedef Props
+	 * @property {function():void} onclick
+	 */
+	/** @type {Props} */
+	let { onclick } = $props();
 </script>
 
-<button on:click class="add-button">
+<button {onclick} class="add-button">
 	<div class="row">
 		<div class="center">
 			<AddIcon />

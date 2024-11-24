@@ -250,7 +250,7 @@
 	<hr class="divider" />
 	<div class="spacer"></div>
 	<div class="row">
-		<AddButton on:click={createTimer} />
+		<AddButton onclick={createTimer} />
 		<p class="total-time">
 			Total time:<span class="fixed-width"
 				>{formatDuration(totalTime)}</span

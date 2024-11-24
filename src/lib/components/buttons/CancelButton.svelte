@@ -2,12 +2,15 @@
 	import { CancelIcon } from "$lib/components/icons";
 
 	/**
-	 * @type {string}
+	 * @typedef Props
+	 * @property {string} margin
+	 * @property {function():void} onclick
 	 */
-	export let margin = "0";
+	/** @type {Props} */
+	let { margin = "0", onclick } = $props();
 </script>
 
-<button on:click class="cancel-button" style="margin: {margin};">
+<button {onclick} class="cancel-button" style="margin: {margin};">
 	<div class="center">
 		<CancelIcon />
 	</div></button

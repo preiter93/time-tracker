@@ -9,6 +9,7 @@
 	 * @type {number | null} timer
 	 */
 	let timer = null;
+
 	/**
 	 * @typedef Props
 	 * @property {string} id
@@ -206,13 +207,13 @@
 			use:focusOnInit
 		/>
 		<ControlButton
-			on:click={isRunning ? pause : start}
+			onclick={isRunning ? pause : start}
 			symbol={isRunning ? "pause" : "play"}
 			cls={isRunning ? "action" : "default"}
 			margin="0 10px"
 		/>
-		<ControlButton on:click={reset} symbol={"stop"} margin="0 5px 0 0" />
-		<CancelButton on:click={onDelete} margin="0 5px 0 0" />
+		<ControlButton onclick={reset} symbol={"stop"} margin="0 5px 0 0" />
+		<CancelButton onclick={onDelete} margin="0 5px 0 0" />
 	</div>
 </div>
 

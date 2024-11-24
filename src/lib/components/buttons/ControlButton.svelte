@@ -7,21 +7,17 @@
 	} from "$lib/components/icons";
 
 	/**
-	 * @type {any}
+	 * @typedef Props
+	 * @property {any} symbol
+	 * @property {string} [cls="default"]
+	 * @property {string} [margin="0"]
+	 * @property {function():void} onclick
 	 */
-	export let symbol;
-
-	/**
-	 * @type {string}
-	 */
-	export let cls = "default";
-	/**
-	 * @type {string}
-	 */
-	export let margin = "0";
+	/** @type {Props} */
+	let { symbol, cls = "default", margin = "0", onclick } = $props();
 </script>
 
-<button on:click class={cls} style="margin: {margin};" data-testid={symbol}>
+<button {onclick} class={cls} style="margin: {margin};" data-testid={symbol}>
 	<div class="center">
 		{#if symbol === "play"}
 			<PlayIcon />
@@ -53,7 +49,8 @@
 		align-items: center;
 		justify-content: center;
 		display: flex;
-		box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2),
+		box-shadow:
+			0px 1px 1px rgba(0, 0, 0, 0.2),
 			inset 0px -2px 3px rgba(0, 0, 0, 0.2);
 	}
 	@media (hover: hover) {
