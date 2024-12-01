@@ -6,8 +6,13 @@
 	import { onDestroy, onMount } from "svelte";
 	import { formatDuration } from "$lib/utils";
 
-	/** @type {import('../routes/$types').PageData} */
-	export let data;
+	/**
+	 * @typedef {Object} Props
+	 * @property {import('../routes/$types').PageData} data
+	 */
+
+	/** @type {Props} */
+	let { data } = $props();
 
 	/**
 	 * The timer items store
@@ -18,7 +23,7 @@
 	 * Timer items
 	 * @type {import('$lib/types.js').TimerItem[]}
 	 */
-	let timers = data.items.data ?? [];
+	let timers = $state(data.items.data ?? []);
 
 	/**
 	 * Creates a timer.
@@ -124,7 +129,7 @@
 	/**
 	 * @type {number} the total time
 	 */
-	let totalTime;
+	let totalTime = $state(0);
 	const unsubscribe = durationsStore.subscribe((durations) => {
 		totalTime = Array.from(durations.values()).reduce(
 			(sum, duration) => sum + duration,
@@ -173,7 +178,7 @@
 	 * Whether an input field is being focused. Used
 	 * to disable drag and drop.
 	 */
-	let isInputFocused = false;
+	let isInputFocused = $state(false);
 
 	/**
 	 * Handles drag start
@@ -208,6 +213,17 @@
 	}
 
 	onDestroy(unsubscribe);
+
+	/**
+	 * @param {(this: any, event: Event) => void} fn
+	 * @returns {(this: any, event: Event) => void}
+	 */
+	const preventDefault = (fn) => {
+		return function (event) {
+			event.preventDefault();
+			fn.call(this, event);
+		};
+	};
 </script>
 
 <div>
@@ -216,11 +232,11 @@
 		<div
 			role="listitem"
 			draggable={!isInputFocused}
-			on:dragstart={(event) => handleDragStart(event, index)}
-			on:dragend={() => handleDragEnd()}
-			on:dragenter={() => handleDragEnter(index)}
-			on:dragover|preventDefault
-			on:drop|preventDefault
+			ondragstart={(event) => handleDragStart(event, index)}
+			ondragend={() => handleDragEnd()}
+			ondragenter={() => handleDragEnter(index)}
+			ondragover={preventDefault((_) => {})}
+			ondrop={() => handleDragEnd()}
 		>
 			<hr class="divider" />
 			<div class="timer" transition:slide>
