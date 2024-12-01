@@ -227,7 +227,6 @@
 </script>
 
 <div>
-	<hr class="divider" />
 	{#each timers as item, index (item.id)}
 		<div
 			role="listitem"
@@ -238,7 +237,9 @@
 			ondragover={preventDefault((_) => {})}
 			ondrop={() => handleDragEnd()}
 		>
-			<hr class="divider" />
+			<!-- {#if index > 0} -->
+			<!-- 	<hr class="divider" /> -->
+			<!-- {/if} -->
 			<div class="timer" transition:slide>
 				<TimerItem
 					id={item.id}
@@ -260,11 +261,9 @@
 					bind:isInputFocused
 				/>
 			</div>
-			<hr class="divider" />
 		</div>
+		<hr class="divider" />
 	{/each}
-	<hr class="divider" />
-	<div class="spacer"></div>
 	<div class="row">
 		<AddButton onclick={createTimer} />
 		<p class="total-time">
@@ -289,13 +288,10 @@
 	hr.divider {
 		margin: 0;
 		border: 0;
-		border-top: 1px solid #ccc;
+		border-top: 2px solid;
 		display: block;
 		border-color: var(--bg-secondary);
 		background-color: var(--bg-secondary);
-	}
-	div.spacer {
-		margin-top: 10px;
 	}
 	.total-time {
 		font-size: 1em;
