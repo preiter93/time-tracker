@@ -31,7 +31,7 @@
 	});
 
 	const sections = [
-		{ name: '⏱  Timers', href: '/time-tracker' },
+		{ name: '⏱  Timers', href: '/time-tracker/' },
 		{ name: '✔ Todos', href: '/time-tracker/todos' }
 	];
 
