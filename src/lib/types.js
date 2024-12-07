@@ -10,7 +10,6 @@
  * @property {number} offsetDuration
  * @property {boolean} isRunning
  * @property {boolean} [requestFocus=false]
- * @property {boolean} isExpanded
  * @property {string} notes
  */
 

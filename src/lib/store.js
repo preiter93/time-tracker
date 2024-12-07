@@ -13,15 +13,13 @@ class TimerItemValue {
 	 * @param {number} duration
 	 * @param {Date|null} started_at
 	 * @param {string} notes
-	 * @param {boolean} isExpanded
 	 */
-	constructor(id, name, duration, started_at, notes, isExpanded) {
+	constructor(id, name, duration, started_at, notes) {
 		this.id = id;
 		this.name = name;
 		this.duration = duration;
 		this.started_at = started_at;
 		this.notes = notes;
-		this.isExpanded = isExpanded;
 	}
 }
 

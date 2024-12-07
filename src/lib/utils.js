@@ -61,3 +61,30 @@ export function blurOnEnter(node) {
 		},
 	};
 }
+
+/**
+ * Blurs the node when Escape is pressed
+ * @param {HTMLElement} node
+ */
+export function blurOnEscape(node) {
+	/**
+	 * Event handler for the keydown event.
+	 * @param {KeyboardEvent} event
+	 */
+	function handleKey(event) {
+		if (
+			event.key === "Escape" &&
+			node &&
+			typeof node.blur === "function"
+		)
+			node.blur();
+	}
+
+	node.addEventListener("keydown", handleKey);
+
+	return {
+		destroy() {
+			node.removeEventListener("keydown", handleKey);
+		},
+	};
+}

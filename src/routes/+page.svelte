@@ -192,11 +192,14 @@
 
 <div
 	class="timer-list"
-	use:dndzone={{ items: timers, flipDurationMs, dropTargetStyle }}
+	use:dndzone={{
+		items: timers,
+		flipDurationMs,
+		dropTargetStyle,
+		dragDisabled: isInputFocused ? true : false,
+	}}
 	onconsider={handleDndConsider}
 	onfinalize={handleDndFinalize}
-	dragDisabled="false"
-	dropFromOthersDisabled="false"
 >
 	{#each timers as item (item.id)}
 		<div role="listitem" animate:flip={{ duration: flipDurationMs }}>
@@ -207,7 +210,6 @@
 					bind:duration={item.duration}
 					bind:offsetDuration={item.offsetDuration}
 					bind:isRunning={item.isRunning}
-					bind:isExpanded={item.isExpanded}
 					bind:notes={item.notes}
 					requestFocus={item.requestFocus}
 					onDelete={() => deleteTimer(item.id)}

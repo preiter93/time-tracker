@@ -4,7 +4,7 @@
 	import { formatDuration, parseTime } from "$lib/utils";
 	import { durationsStore } from "$lib/store";
 	import { slide } from "svelte/transition";
-	import { blurOnEnter } from "$lib/utils";
+	import { blurOnEnter, blurOnEscape } from "$lib/utils";
 
 	/**
 	 * @type {number | null} timer
@@ -19,7 +19,6 @@
 	 * @property {number} duration
 	 * @property {boolean} isRunning
 	 * @property {boolean | undefined} requestFocus
-	 * @property {boolean} isExpanded
 	 * @property {boolean} isInputFocused
 	 * @property {string} notes
 	 * @property {function():void} onDelete
@@ -40,7 +39,6 @@
 		duration = $bindable(),
 		isRunning = $bindable(),
 		requestFocus = false,
-		isExpanded = $bindable(),
 		notes = $bindable(),
 		isInputFocused = $bindable(),
 		onDelete,
@@ -50,8 +48,13 @@
 		onChangeDuration,
 		onChangeNotes,
 		onChangeName,
-		onToggleExpanded,
 	} = $props();
+
+	let isExpanded = $state(false);
+
+	function toggleIsExpanded() {
+		isExpanded = !isExpanded;
+	}
 
 	/**
 	 * @typedef {Object} TotalDuration
@@ -140,7 +143,7 @@
 <div class="timer-item">
 	<div class="timer-item-content">
 		<div class="timer-name-row">
-			<button onclick={onToggleExpanded} class="chevron">
+			<button onclick={toggleIsExpanded} class="chevron">
 				<div>
 					<svg
 						class="chevron {isExpanded ? 'up' : 'down'}"
@@ -166,6 +169,7 @@
 				}}
 				bind:value={name}
 				use:blurOnEnter
+				use:blurOnEscape
 				use:focusOnInit
 			/>
 		</div>
@@ -211,6 +215,7 @@
 						handleBlur();
 						onChangeNotes(notes);
 					}}
+					use:blurOnEscape
 				></textarea>
 			</div>
 		{/if}
@@ -259,7 +264,7 @@
 		background-color: transparent;
 	}
 	.notes {
-		padding: 0px 10px 10px 10px;
+		padding: 10px 10px 0px 10px;
 	}
 	.notes.textarea {
 		padding: 5px;

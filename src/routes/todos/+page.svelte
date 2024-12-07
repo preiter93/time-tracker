@@ -3,7 +3,7 @@
 	import { dndzone } from "svelte-dnd-action";
 	import { TodoStore } from "$lib/todos_store.js";
 	import { AddButton, CancelButton } from "$lib/components/buttons";
-	import { blurOnEnter } from "$lib/utils";
+	import { blurOnEnter, blurOnEscape } from "$lib/utils";
 
 	const flipDurationMs = 100;
 	const dropTargetStyle = {
@@ -38,6 +38,11 @@
 			todos = newTodos;
 		}
 	}
+
+	/**
+	 * Whether an input is focused
+	 */
+	let isInputFocused = $state(false);
 
 	/**
 	 * Change the content of a todo
@@ -85,7 +90,12 @@
 
 <div
 	class="todo-list"
-	use:dndzone={{ items: todos, flipDurationMs, dropTargetStyle }}
+	use:dndzone={{
+		items: todos,
+		flipDurationMs,
+		dropTargetStyle,
+		dragDisabled: isInputFocused ? true : false,
+	}}
 	onconsider={handleDndConsider}
 	onfinalize={handleDndFinalize}
 >
@@ -94,8 +104,15 @@
 			<input
 				type="text"
 				class="todo-input"
-				onblur={() => updateContent(item.id, item.content)}
+				onblur={() => {
+					updateContent(item.id, item.content);
+					isInputFocused = false;
+				}}
+				onfocus={() => {
+					isInputFocused = true;
+				}}
 				use:blurOnEnter
+				use:blurOnEscape
 				bind:value={item.content}
 			/>
 			<CancelButton
