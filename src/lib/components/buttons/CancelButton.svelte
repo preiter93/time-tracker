@@ -10,7 +10,12 @@
 	let { margin = "0", onclick } = $props();
 </script>
 
-<button {onclick} class="cancel-button" style="margin: {margin};">
+<button
+	{onclick}
+	ontouchend={onclick}
+	class="cancel-button"
+	style="margin: {margin};"
+>
 	<div class="center">
 		<CancelIcon />
 	</div></button

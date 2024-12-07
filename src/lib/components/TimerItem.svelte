@@ -143,7 +143,11 @@
 <div class="timer-item">
 	<div class="timer-item-content">
 		<div class="timer-name-row">
-			<button onclick={toggleIsExpanded} class="chevron">
+			<button
+				onclick={toggleIsExpanded}
+				ontouchend={toggleIsExpanded}
+				class="chevron"
+			>
 				<div>
 					<svg
 						class="chevron {isExpanded ? 'up' : 'down'}"

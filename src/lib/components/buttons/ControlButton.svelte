@@ -17,7 +17,13 @@
 	let { symbol, cls = "default", margin = "0", onclick } = $props();
 </script>
 
-<button {onclick} class={cls} style="margin: {margin};" data-testid={symbol}>
+<button
+	{onclick}
+	ontouchend={onclick}
+	class={cls}
+	style="margin: {margin};"
+	data-testid={symbol}
+>
 	<div class="center">
 		{#if symbol === "play"}
 			<PlayIcon />
