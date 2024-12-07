@@ -1,6 +1,9 @@
 <script>
 	import { flip } from "svelte/animate";
 	import { dndzone } from "svelte-dnd-action";
+	import { TodoStore } from "$lib/todos_store.js";
+	import { AddButton, CancelButton } from "$lib/components/buttons";
+	import { blurOnEnter } from "$lib/utils";
 
 	const flipDurationMs = 100;
 	const dropTargetStyle = {
@@ -8,50 +11,101 @@
 	};
 
 	/**
-	 * Represents an item in the todo list.
-	 * @typedef {Object} Item
-	 * @property {number} id - The identifier of the item.
-	 * @property {string} content - The todo content of the item.
+	 * @typedef {Object} Props
+	 * @property {import('$lib/types').PageData<import('$lib/types').TodoItem[]>} data
 	 */
 
-	/** @type {Item[]} */
-	let items = [
-		{ id: 11, content: "Item11" },
-		{ id: 12, content: "Item12" },
-		{ id: 13, content: "Item13" },
-		{ id: 14, content: "Item14" },
-		{ id: 15, content: "Item15" },
-		{ id: 16, content: "Item16" },
-		{ id: 17, content: "Item17" },
-	];
+	/** @type {Props} */
+	let { data } = $props();
 
 	/**
-	 * @param {{ detail: { items: Item[]; } }} e
+	 * The todo items store
+	 */
+	let store = new TodoStore();
+
+	/**
+	 * Todo items
+	 * @type {import('$lib/types').TodoItem[]}
+	 */
+	let todos = $state(data.items.data ?? []);
+
+	/**
+	 * Creates a todo.
+	 */
+	function createTodo() {
+		let newTodos = store.create();
+		if (newTodos !== null) {
+			todos = newTodos;
+		}
+	}
+
+	/**
+	 * Change the content of a todo
+	 * @param {string} id
+	 * @param {string} content
+	 */
+	function updateContent(id, content) {
+		console.log("update content " + id);
+		let newTodos = store.updateContent(id, content);
+		if (newTodos !== null) {
+			todos = newTodos;
+		}
+	}
+
+	/**
+	 * Delete a todo item
+	 * @param {string} id
+	 */
+	function deleteTodo(id) {
+		let newTodos = store.delete(id);
+		if (newTodos !== null) {
+			todos = newTodos;
+		}
+	}
+
+	/**
+	 * @param {{ detail: { items: import('$lib/types.js').TodoItem[]; } }} e
 	 */
 	function handleDndConsider(e) {
-		items = e.detail.items;
+		todos = e.detail.items;
 	}
 	/**
-	 * @param {{ detail: { items: Item[]; } }} e
+	 * @param {{ detail: { items: import('$lib/types.js').TodoItem[]; } }} e
 	 */
 	function handleDndFinalize(e) {
-		items = e.detail.items;
+		todos = e.detail.items;
+
+		let ids = new Array(e.detail.items.length);
+		for (const i in e.detail.items) {
+			ids[i] = e.detail.items[i].id;
+		}
+		store.sortByIds(ids);
 	}
 </script>
 
 <div
 	class="todo-list"
-	use:dndzone={{ items, flipDurationMs, dropTargetStyle }}
+	use:dndzone={{ items: todos, flipDurationMs, dropTargetStyle }}
 	onconsider={handleDndConsider}
 	onfinalize={handleDndFinalize}
 >
-	{#each items as item (item.id)}
+	{#each todos as item (item.id)}
 		<div class="todo-item" animate:flip={{ duration: flipDurationMs }}>
-			<p>
-				{item.content}
-			</p>
+			<input
+				type="text"
+				class="todo-input"
+				onblur={() => updateContent(item.id, item.content)}
+				use:blurOnEnter
+				bind:value={item.content}
+			/>
+			<CancelButton
+				onclick={() => deleteTodo(item.id)}
+				margin="0 5px 0 0"
+			/>
 		</div>
 	{/each}
+
+	<AddButton onclick={createTodo} text="Add todo" />
 </div>
 
 <style>
@@ -60,11 +114,20 @@
 		padding: 0.4em;
 	}
 	.todo-item {
-		padding: 0.2em;
+		padding: 1em 0.2em;
 		margin: 0.4em 0;
 		border: 2px solid black;
 		color: var(--text-primary);
 		font-size: 20px;
 		line-height: 0.2;
+		display: flex;
+		justify-content: space-between;
+	}
+	.todo-input {
+		font-size: 20px;
+		background-color: transparent;
+		border: none;
+		width: 50%;
+		min-width: 200px;
 	}
 </style>

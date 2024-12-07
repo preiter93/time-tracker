@@ -4,9 +4,10 @@
 	/**
 	 * @typedef Props
 	 * @property {function():void} onclick
+	 * @property {string} text
 	 */
 	/** @type {Props} */
-	let { onclick } = $props();
+	let { onclick, text } = $props();
 </script>
 
 <button {onclick} class="add-button">
@@ -14,7 +15,7 @@
 		<div class="center">
 			<AddIcon />
 		</div>
-		<p class="text">Add timer</p>
+		<p class="text">{text}</p>
 	</div>
 </button>
 

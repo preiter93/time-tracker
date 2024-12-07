@@ -142,21 +142,6 @@ export class TimerStore {
 	}
 
 	/**
-	 * Swap timers. Used for drag and drop.
-	 * @param {number} index1
-	 * @param {number} index2
-	 * Swap two items
-	 */
-	swap(index1, index2) {
-		let items = fetchTimerItemsFromStore();
-		const temp = items[index1];
-		items[index1] = items[index2];
-		items[index2] = temp;
-		setItems(items);
-		return items.map(timer => convertTimerItem(timer));
-	}
-
-	/**
 	 * Sort timers by ids. 
 	 * @param {Array<string>} ids
 	 */

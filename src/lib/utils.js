@@ -34,3 +34,30 @@ export function parseTime(time) {
 	}
 	return h * 3600 + m * 60 + s;
 }
+
+/**
+ * Blurs the node when Enter is pressed
+ * @param {HTMLElement} node
+ */
+export function blurOnEnter(node) {
+	/**
+	 * Event handler for the keydown event.
+	 * @param {KeyboardEvent} event
+	 */
+	function handleKey(event) {
+		if (
+			event.key === "Enter" &&
+			node &&
+			typeof node.blur === "function"
+		)
+			node.blur();
+	}
+
+	node.addEventListener("keydown", handleKey);
+
+	return {
+		destroy() {
+			node.removeEventListener("keydown", handleKey);
+		},
+	};
+}

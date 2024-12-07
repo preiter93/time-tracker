@@ -4,6 +4,7 @@
 	import { formatDuration, parseTime } from "$lib/utils";
 	import { durationsStore } from "$lib/store";
 	import { slide } from "svelte/transition";
+	import { blurOnEnter } from "$lib/utils";
 
 	/**
 	 * @type {number | null} timer
@@ -114,33 +115,6 @@
 		}
 	}
 
-	/**
-	 * Blurs the node when Enter is pressed
-	 * @param {HTMLElement} node
-	 */
-	export function blurOnEnter(node) {
-		/**
-		 * Event handler for the keydown event.
-		 * @param {KeyboardEvent} event
-		 */
-		function handleKey(event) {
-			if (
-				event.key === "Enter" &&
-				node &&
-				typeof node.blur === "function"
-			)
-				node.blur();
-		}
-
-		node.addEventListener("keydown", handleKey);
-
-		return {
-			destroy() {
-				node.removeEventListener("keydown", handleKey);
-			},
-		};
-	}
-
 	function handleFocus() {
 		isInputFocused = true;
 	}
@@ -164,85 +138,104 @@
 </script>
 
 <div class="timer-item">
-	<button onclick={onToggleExpanded} class="chevron">
-		<div>
-			<svg
-				class="chevron {isExpanded ? 'up' : 'down'}"
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 24 24"
-			>
-				<path
-					class="chevron path"
-					d="M12 15L6 9H18L12 15Z"
-					fill="currentColor"
-				/>
-				>
-			</svg>
+	<div class="timer-item-content">
+		<div class="timer-name-row">
+			<button onclick={onToggleExpanded} class="chevron">
+				<div>
+					<svg
+						class="chevron {isExpanded ? 'up' : 'down'}"
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+					>
+						<path
+							class="chevron path"
+							d="M12 15L6 9H18L12 15Z"
+							fill="currentColor"
+						/>
+						>
+					</svg>
+				</div>
+			</button>
+			<input
+				type="text"
+				class="timer-name-input"
+				onfocus={handleFocus}
+				onblur={() => {
+					handleBlur();
+					onChangeName(name);
+				}}
+				bind:value={name}
+				use:blurOnEnter
+				use:focusOnInit
+			/>
 		</div>
-	</button>
-	<input
-		type="text"
-		class="timer-name"
-		onfocus={handleFocus}
-		onblur={() => {
-			handleBlur();
-			onChangeName(name);
-		}}
-		bind:value={name}
-		use:blurOnEnter
-		use:focusOnInit
-	/>
-	<div class="inner-row">
-		<input
-			class="timer-time"
-			type="text"
-			disabled={isRunning}
-			onfocus={handleFocus}
-			onblur={(/** @type {{ target: { value: string; }; }} */ event) => {
-				handleBlur();
-				changeDuration(event.target.value);
-			}}
-			value={totalDuration.display}
-			use:blurOnEnter
-			use:focusOnInit
-		/>
-		<ControlButton
-			onclick={isRunning ? pause : start}
-			symbol={isRunning ? "pause" : "play"}
-			cls={isRunning ? "action" : "default"}
-			margin="0 10px"
-		/>
-		<ControlButton onclick={reset} symbol={"stop"} margin="0 5px 0 0" />
-		<CancelButton onclick={onDelete} margin="0 5px 0 0" />
+		<div class="inner-row">
+			<input
+				class="timer-time"
+				type="text"
+				disabled={isRunning}
+				onfocus={handleFocus}
+				onblur={(
+					/** @type {{ target: { value: string; }; }} */ event,
+				) => {
+					handleBlur();
+					changeDuration(event.target.value);
+				}}
+				value={totalDuration.display}
+				use:blurOnEnter
+				use:focusOnInit
+			/>
+			<ControlButton
+				onclick={isRunning ? pause : start}
+				symbol={isRunning ? "pause" : "play"}
+				cls={isRunning ? "action" : "default"}
+				margin="0 10px"
+			/>
+			<ControlButton onclick={reset} symbol={"stop"} margin="0 5px 0 0" />
+			<CancelButton onclick={onDelete} margin="0 5px 0 0" />
+		</div>
 	</div>
+	{#if isExpanded}
+		<div class="notes" transition:slide={{ duration: 500 }}>
+			<textarea
+				class="notes textarea"
+				bind:value={notes}
+				placeholder="Enter some text"
+				onfocus={handleFocus}
+				onblur={() => {
+					handleBlur();
+					onChangeNotes(notes);
+				}}
+			></textarea>
+		</div>
+	{/if}
 </div>
-
-{#if isExpanded}
-	<div class="notes" transition:slide={{ duration: 300 }}>
-		<textarea
-			class="notes textarea"
-			bind:value={notes}
-			placeholder="Enter some text"
-			onfocus={handleFocus}
-			onblur={() => {
-				handleBlur();
-				onChangeNotes(notes);
-			}}
-		></textarea>
-	</div>
-{/if}
 
 <style>
 	.timer-item {
-		margin: 10px 0;
-		align-items: center;
-		display: flex;
-	}
-	.timer-name {
+		border: 2px solid black;
+		color: var(--text-primary);
 		font-size: 20px;
+	}
+	.timer-item-content {
+		padding: 1em 0.2em;
+		margin: 0.4em 0;
+		color: var(--text-primary);
+		font-size: 20px;
+		line-height: 0.2;
+		display: flex;
+		justify-content: space-between;
+	}
+	.timer-name-row {
+		display: flex;
+		justify-content: space-between;
 		width: 100%;
+	}
+	.timer-name-input {
+		font-size: 20px;
 		border: none;
 		background-color: transparent;
+		width: 100%;
 	}
 	.inner-row {
 		display: flex;
@@ -272,7 +265,7 @@
 		justify-content: center;
 		display: flex;
 		width: 28px;
-		height: 28px;
+		height: 40px;
 		fill: var(--text-primary);
 		transition: transform 0.3s ease;
 		margin: 0px 5px 0px 5px;

@@ -14,4 +14,18 @@
  * @property {string} notes
  */
 
+/**
+ * @typedef {Object} TodoItem
+ * @property {string} id
+ * @property {string} content
+ */
+
+// This is a simple generic type for PageData
+/**
+ * @template T
+ * @typedef {Object} PageData
+ * @property {Object} items
+ * @property {T} items.data
+ */
+
 export const unused = {}
