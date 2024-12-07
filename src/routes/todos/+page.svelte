@@ -115,14 +115,12 @@
 				use:blurOnEscape
 				bind:value={item.content}
 			/>
-			<CancelButton
-				onclick={() => deleteTodo(item.id)}
-				margin="0 0 0 0"
-			/>
+			<CancelButton onclick={() => deleteTodo(item.id)} />
 		</div>
 	{/each}
-
-	<AddButton onclick={createTodo} text="Add todo" />
+	<div class="todo-add">
+		<AddButton onclick={createTodo} text="Add todo" />
+	</div>
 </div>
 
 <style>
@@ -145,5 +143,11 @@
 		border: none;
 		width: 50%;
 		min-width: 200px;
+	}
+	.todo-add {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 100%;
 	}
 </style>

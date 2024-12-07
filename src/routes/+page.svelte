@@ -246,8 +246,7 @@
 		display: block;
 	}
 	.total-time {
-		font-size: 1em;
-		margin-right: 10px;
+		margin: 0 10px 0 0;
 	}
 	.fixed-width {
 		display: inline-block;

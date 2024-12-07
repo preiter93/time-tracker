@@ -4,6 +4,7 @@
 	import { fade } from "svelte/transition";
 	import { onMount } from "svelte";
 	import { DarkIcon, LightIcon } from "$lib/components/icons";
+	import {base } from '$app/paths';
 
 	let { children } = $props();
 
@@ -31,12 +32,9 @@
 	});
 
 	const sections = [
-		{ name: '⏱  Timers', href: '/time-tracker/' },
-		{ name: '✔ Todos', href: '/time-tracker/todos' }
+		{ name: '⏱  Timers', href: `${base}/` },
+		{ name: '✔ Todos', href: `${base}/todos` }
 	];
-
-	const basePath = 'time-tracker';
-	$effect(() => console.log("base path" + basePath));
 </script>
 
 <div class="header">

@@ -3,7 +3,7 @@
 
 	/**
 	 * @typedef Props
-	 * @property {string} margin
+	 * @property {string} [margin]
 	 * @property {function():void} onclick
 	 */
 	/** @type {Props} */
