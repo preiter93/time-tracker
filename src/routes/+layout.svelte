@@ -31,10 +31,12 @@
 	});
 
 	const sections = [
-		{ name: '⏱  Timers', href: '/' },
-		{ name: '✔ Todos', href: '/todos' }
+		{ name: '⏱  Timers', href: '/time-tracker' },
+		{ name: '✔ Todos', href: '/time-tracker/todos' }
 	];
 
+	const basePath = 'time-tracker';
+	$effect(() => console.log("base path" + basePath));
 </script>
 
 <div class="header">

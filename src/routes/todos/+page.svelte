@@ -100,7 +100,7 @@
 			/>
 			<CancelButton
 				onclick={() => deleteTodo(item.id)}
-				margin="0 5px 0 0"
+				margin="0 0 0 0"
 			/>
 		</div>
 	{/each}
@@ -111,11 +111,10 @@
 <style>
 	.todo-list {
 		display: block;
-		padding: 0.4em;
 	}
 	.todo-item {
-		padding: 1em 0.2em;
-		margin: 0.4em 0;
+		padding: 1em 0.25em 1em 1em;
+		margin: 0.4em 0.4em;
 		border: 2px solid black;
 		color: var(--text-primary);
 		font-size: 20px;

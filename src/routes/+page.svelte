@@ -242,7 +242,6 @@
 	}
 	.timer {
 		display: block;
-		padding: 0.4em;
 	}
 	.total-time {
 		font-size: 1em;

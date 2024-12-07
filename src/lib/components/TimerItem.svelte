@@ -195,20 +195,26 @@
 			<CancelButton onclick={onDelete} margin="0 5px 0 0" />
 		</div>
 	</div>
-	{#if isExpanded}
-		<div class="notes" transition:slide={{ duration: 500 }}>
-			<textarea
-				class="notes textarea"
-				bind:value={notes}
-				placeholder="Enter some text"
-				onfocus={handleFocus}
-				onblur={() => {
-					handleBlur();
-					onChangeNotes(notes);
-				}}
-			></textarea>
-		</div>
-	{/if}
+	<div>
+		{#if isExpanded}
+			<div
+				class="notes"
+				transition:slide={{ duration: 500 }}
+				style:visibility={isExpanded ? "visible" : "hidden"}
+			>
+				<textarea
+					class="notes textarea"
+					bind:value={notes}
+					placeholder="Enter some text"
+					onfocus={handleFocus}
+					onblur={() => {
+						handleBlur();
+						onChangeNotes(notes);
+					}}
+				></textarea>
+			</div>
+		{/if}
+	</div>
 </div>
 
 <style>
@@ -216,26 +222,31 @@
 		border: 2px solid black;
 		color: var(--text-primary);
 		font-size: 20px;
+		padding: 0 0;
+		margin: 0 0;
+		padding: 1em 0em;
+		margin: 0.4em 0.4em;
 	}
 	.timer-item-content {
-		padding: 1em 0.2em;
-		margin: 0.4em 0;
 		color: var(--text-primary);
 		font-size: 20px;
-		line-height: 0.2;
 		display: flex;
 		justify-content: space-between;
 	}
 	.timer-name-row {
+		padding: 0 0;
+		margin: 0 0;
 		display: flex;
-		justify-content: space-between;
+		justify-content: start;
 		width: 100%;
 	}
 	.timer-name-input {
+		padding: 0 0;
+		margin: 0 0;
 		font-size: 20px;
 		border: none;
 		background-color: transparent;
-		width: 100%;
+		width: 50%;
 	}
 	.inner-row {
 		display: flex;
@@ -267,10 +278,10 @@
 		width: 28px;
 		height: 40px;
 		fill: var(--text-primary);
-		transition: transform 0.3s ease;
-		margin: 0px 5px 0px 5px;
 		background-color: transparent;
 		border: none;
+		padding: 0 0;
+		margin: 0 0;
 	}
 	.chevron.down {
 		transform: rotate(0deg);
