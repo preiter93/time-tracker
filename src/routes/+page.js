@@ -1,4 +1,4 @@
-import { TimerStore } from "$lib/store";
+import { TimerStore } from "$lib/timer_store";
 
 /** @type {import('./$types').PageLoad} */
 export function load() {

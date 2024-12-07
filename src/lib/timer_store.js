@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 
-const storeKey = 'items';
+const storeKey = 'timers';
 
 /**
  * Represents the timer as it is stored in the local
@@ -44,7 +44,7 @@ export class TimerStore {
 	create() {
 		let items = fetchTimerItemsFromStore();
 		let id = generateRandomID();
-		let newTimer = new TimerItemValue(id, `Timer ${items.length + 1}`, 0, null, "", false);
+		let newTimer = new TimerItemValue(id, `Timer ${items.length + 1}`, 0, null, "");
 		items.push(newTimer);
 		setItems(items);
 		return items.map(timer => convertTimerItem(timer, timer.id === id));
@@ -114,16 +114,6 @@ export class TimerStore {
 	updateNotes(id, notes) {
 		return updateTimerItemInStore(id, (item) => {
 			item.notes = notes;
-			return item;
-		})
-	}
-
-	/**
-	 * @param {string} id
-	 */
-	toggleExpanded(id) {
-		return updateTimerItemInStore(id, (item) => {
-			item.isExpanded = !item.isExpanded;
 			return item;
 		})
 	}
@@ -214,7 +204,6 @@ function convertTimerItem(timer, requestFocus) {
 		offsetDuration: offsetDuration,
 		requestFocus: requestFocus,
 		notes: timer.notes,
-		isExpanded: timer.isExpanded,
 	};
 }
 

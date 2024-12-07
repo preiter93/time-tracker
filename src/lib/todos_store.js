@@ -22,7 +22,7 @@ export class TodoStore {
 		let id = generateRandomID();
 		let newItem = {
 			id: id,
-			content: `TODO ${items.length + 1}`,
+			content: `Todo ${items.length + 1}`,
 		};
 		items.push(newItem);
 		setItems(items);

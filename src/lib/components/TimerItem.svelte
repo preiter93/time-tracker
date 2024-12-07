@@ -2,7 +2,7 @@
 	import { onDestroy, onMount } from "svelte";
 	import { ControlButton, CancelButton } from "$lib/components/buttons";
 	import { formatDuration, parseTime } from "$lib/utils";
-	import { durationsStore } from "$lib/store";
+	import { durationsStore } from "$lib/timer_store";
 	import { slide } from "svelte/transition";
 	import { blurOnEnter, blurOnEscape } from "$lib/utils";
 

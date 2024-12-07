@@ -1,6 +1,6 @@
 <script>
 	import TimerItem from "$lib/components/TimerItem.svelte";
-	import { TimerStore, durationsStore } from "$lib/store.js";
+	import { TimerStore, durationsStore } from "$lib/timer_store.js";
 	import { AddButton } from "$lib/components/buttons";
 	import { onDestroy, onMount } from "svelte";
 	import { formatDuration } from "$lib/utils";
