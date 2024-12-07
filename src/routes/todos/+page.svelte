@@ -42,8 +42,8 @@
 <div
 	class="todo-list"
 	use:dndzone={{ items, flipDurationMs, dropTargetStyle }}
-	on:consider={handleDndConsider}
-	on:finalize={handleDndFinalize}
+	onconsider={handleDndConsider}
+	onfinalize={handleDndFinalize}
 >
 	{#each items as item (item.id)}
 		<div class="todo-item" animate:flip={{ duration: flipDurationMs }}>

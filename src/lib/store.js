@@ -155,6 +155,26 @@ export class TimerStore {
 		setItems(items);
 		return items.map(timer => convertTimerItem(timer));
 	}
+
+	/**
+	 * Sort timers by ids. 
+	 * @param {Array<string>} ids
+	 */
+	sortByIds(ids) {
+		let storeItems = fetchTimerItemsFromStore();
+		if (ids.length != storeItems.length) {
+			console.log("sortByIds len mismatch detected")
+			return
+		}
+		let sortedItems = new Array(ids.length)
+		for (const i in ids) {
+			const index = storeItems.findIndex(
+				(item) => item.id === ids[i]
+			);
+			sortedItems[i] = storeItems[index]
+		}
+		setItems(sortedItems);
+	}
 }
 
 /**

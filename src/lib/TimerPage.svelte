@@ -2,9 +2,15 @@
 	import TimerItem from "$lib/components/TimerItem.svelte";
 	import { TimerStore, durationsStore } from "$lib/store.js";
 	import { AddButton } from "$lib/components/buttons";
-	import { slide } from "svelte/transition";
 	import { onDestroy, onMount } from "svelte";
 	import { formatDuration } from "$lib/utils";
+	import { dndzone } from "svelte-dnd-action";
+	import { flip } from "svelte/animate";
+
+	const flipDurationMs = 100;
+	const dropTargetStyle = {
+		"background-color": "none",
+	};
 
 	/**
 	 * @typedef {Object} Props
@@ -138,24 +144,6 @@
 	});
 
 	/**
-	 * @type {number|null}
-	 */
-	let draggingIndex = null;
-
-	/**
-	 * @param {number} index
-	 */
-	function swapTimers(index) {
-		if (draggingIndex != null && index != draggingIndex) {
-			// swap
-			timers = store.swap(draggingIndex, index);
-
-			// balance
-			draggingIndex = index;
-		}
-	}
-
-	/**
 	 * We need to resynchronize the timers with the
 	 * local storage after the browser has been
 	 * hidden for a while.
@@ -180,67 +168,69 @@
 	 */
 	let isInputFocused = $state(false);
 
+	// /**
+	//  * Handles drag start
+	//  * @param {DragEvent} event
+	//  * @param {number} index
+	//  */
+	// function handleDragStart(event, index) {
+	// 	draggingIndex = index;
+	// 	// Necessary for drag & drop to work on touch screens
+	// 	let dataTransfer = event.dataTransfer;
+	// 	if (dataTransfer !== null) {
+	// 		let data = JSON.stringify({
+	// 			index: index,
+	// 		});
+	// 		dataTransfer.setData("text/plain", data);
+	// 	}
+	// }
+	//
+	// /**
+	//  * Handles drag end
+	//  */
+	// function handleDragEnd() {
+	// 	draggingIndex = null;
+	// }
+	//
+	// /**
+	//  * Handles drag enter
+	//  * @param {number} index
+	//  */
+	// function handleDragEnter(index) {
+	// 	swapTimers(index);
+	// }
+
 	/**
-	 * Handles drag start
-	 * @param {DragEvent} event
-	 * @param {number} index
+	 * @param {{ detail: { items: import('$lib/types.js').TimerItem[]; } }} e
 	 */
-	function handleDragStart(event, index) {
-		draggingIndex = index;
-		// Necessary for drag & drop to work on touch screens
-		let dataTransfer = event.dataTransfer;
-		if (dataTransfer !== null) {
-			let data = JSON.stringify({
-				index: index,
-			});
-			dataTransfer.setData("text/plain", data);
+	function handleDndConsider(e) {
+		timers = e.detail.items;
+	}
+	/**
+	 * @param {{ detail: { items: import('$lib/types.js').TimerItem[]; } }} e
+	 */
+	function handleDndFinalize(e) {
+		timers = e.detail.items;
+
+		let ids = new Array(e.detail.items.length);
+		for (const i in e.detail.items) {
+			ids[i] = e.detail.items[i].id;
 		}
-	}
-
-	/**
-	 * Handles drag end
-	 */
-	function handleDragEnd() {
-		draggingIndex = null;
-	}
-
-	/**
-	 * Handles drag enter
-	 * @param {number} index
-	 */
-	function handleDragEnter(index) {
-		swapTimers(index);
+		store.sortByIds(ids);
 	}
 
 	onDestroy(unsubscribe);
-
-	/**
-	 * @param {(this: any, event: Event) => void} fn
-	 * @returns {(this: any, event: Event) => void}
-	 */
-	const preventDefault = (fn) => {
-		return function (event) {
-			event.preventDefault();
-			fn.call(this, event);
-		};
-	};
 </script>
 
-<div>
-	{#each timers as item, index (item.id)}
-		<div
-			role="listitem"
-			draggable={!isInputFocused}
-			ondragstart={(event) => handleDragStart(event, index)}
-			ondragend={() => handleDragEnd()}
-			ondragenter={() => handleDragEnter(index)}
-			ondragover={preventDefault((_) => {})}
-			ondrop={() => handleDragEnd()}
-		>
-			<!-- {#if index > 0} -->
-			<!-- 	<hr class="divider" /> -->
-			<!-- {/if} -->
-			<div class="timer" transition:slide>
+<div
+	class="timer-list"
+	use:dndzone={{ items: timers, flipDurationMs, dropTargetStyle }}
+	onconsider={handleDndConsider}
+	onfinalize={handleDndFinalize}
+>
+	{#each timers as item (item.id)}
+		<div role="listitem" animate:flip={{ duration: flipDurationMs }}>
+			<div class="timer">
 				<TimerItem
 					id={item.id}
 					bind:name={item.name}
@@ -262,7 +252,7 @@
 				/>
 			</div>
 		</div>
-		<hr class="divider" />
+		<!-- <hr class="divider" /> -->
 	{/each}
 	<div class="row">
 		<AddButton onclick={createTimer} />
@@ -284,14 +274,8 @@
 	.timer {
 		background-color: var(--bg-primary);
 		padding: 1px 0px;
-	}
-	hr.divider {
-		margin: 0;
-		border: 0;
-		border-top: 2px solid;
-		display: block;
 		border-color: var(--bg-secondary);
-		background-color: var(--bg-secondary);
+		border-bottom: 2px solid;
 	}
 	.total-time {
 		font-size: 1em;
