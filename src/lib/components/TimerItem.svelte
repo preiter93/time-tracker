@@ -234,6 +234,7 @@
 <style>
 	.timer-item {
 		border: 2px solid black;
+		border-color: var(--bg-header);
 		color: var(--text-primary);
 		font-size: var(--font-size-medium);
 		padding: 0 0;
@@ -322,18 +323,12 @@
 	.stop-button {
 		margin: 0 5px 0 0;
 	}
-	.delete-button {
-		margin: 0 0 0 0;
-	}
 	@media (max-width: 600px) {
 		.start-button {
 			margin: 0 5px 0 5px;
 		}
 		.stop-button {
-			margin: 0 0px 0 0;
-		}
-		.delete-button {
-			margin: 0 0 0 0;
+			margin: 0 3px 0 0;
 		}
 	}
 </style>
