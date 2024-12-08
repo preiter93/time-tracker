@@ -233,14 +233,12 @@
 
 <style>
 	.timer-item {
+		padding: 1em 0.25em;
+		margin: 0.4em 0.4em;
 		border: 2px solid black;
 		border-color: var(--bg-header);
 		color: var(--text-primary);
 		font-size: var(--font-size-medium);
-		padding: 0 0;
-		margin: 0 0;
-		padding: 1em 0.25em;
-		margin: 0.4em 0.4em;
 	}
 	.timer-item-content {
 		color: var(--text-primary);
@@ -249,10 +247,7 @@
 		justify-content: space-between;
 	}
 	.timer-name-row {
-		padding: 0 0;
-		margin: 0 0;
 		display: flex;
-		justify-content: start;
 		width: 100%;
 	}
 	.timer-name-input {

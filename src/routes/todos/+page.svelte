@@ -120,8 +120,10 @@
 				use:blurOnEscape
 				bind:value={item.content}
 			/>
-			<div class="actions">
-				<CancelButton onclick={() => deleteTodo(item.id)} />
+			<div class="todo-actions">
+				<div class="delete-button">
+					<CancelButton onclick={() => deleteTodo(item.id)} />
+				</div>
 				<div
 					class="drag-handle"
 					use:dragHandle
@@ -142,12 +144,11 @@
 		display: block;
 	}
 	.todo-item {
-		padding: 1em 0.25em 1em 0.5em;
+		padding: 1em 0.25em;
 		margin: 0.4em 0.4em;
 		border: 2px solid black;
 		color: var(--text-primary);
 		font-size: var(--font-size-medium);
-		line-height: 0.2;
 		display: flex;
 		justify-content: space-between;
 	}
@@ -158,15 +159,14 @@
 		width: 90%;
 		min-width: 200px;
 	}
+	.todo-actions {
+		display: flex;
+	}
 	.todo-add {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		height: 100%;
-	}
-	.actions {
-		display: flex;
-		align-items: center;
 	}
 	.drag-handle {
 		width: var(--icon-size-medium);
@@ -174,5 +174,6 @@
 		align-items: center;
 		justify-content: center;
 		display: flex;
+		margin: 0;
 	}
 </style>
