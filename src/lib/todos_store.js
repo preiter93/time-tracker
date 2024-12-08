@@ -56,11 +56,8 @@ export class TodoStore {
 	 * @param {Array<string>} ids
 	 */
 	sortByIds(ids) {
-		console.log("sort by ids" + ids);
 		let storeItems = fetchTodoItemsFromStore();
-		console.log("storeItems" + storeItems);
 		if (ids.length != storeItems.length) {
-			console.log("sortByIds len mismatch detected")
 			return
 		}
 		let sortedItems = new Array(ids.length)
@@ -70,7 +67,6 @@ export class TodoStore {
 			);
 			sortedItems[i] = storeItems[index]
 		}
-		console.log("sortedItems" + sortedItems);
 		setItems(sortedItems);
 	}
 }
@@ -111,7 +107,6 @@ function updateTodoItemInStore(id, cb) {
 	const index = items.findIndex(
 		(item) => item.id === id
 	);
-	console.log("index" + index)
 	if (index !== -1) {
 		items[index] = cb(items[index]);
 		setItems(items);

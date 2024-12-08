@@ -5,6 +5,8 @@
 	import { durationsStore } from "$lib/timer_store";
 	import { slide } from "svelte/transition";
 	import { blurOnEnter, blurOnEscape } from "$lib/utils";
+	import { dragHandle } from "svelte-dnd-action";
+	import DragHandleIcon from "./icons/DragHandleIcon.svelte";
 
 	/**
 	 * @type {number | null} timer
@@ -28,7 +30,6 @@
 	 * @property {function(string):void} onChangeNotes
 	 * @property {function(string):void} onChangeName
 	 * @property {function(number):void} onChangeDuration
-	 * @property {function():void} onToggleExpanded
 	 */
 
 	/** @type {Props} */
@@ -143,11 +144,7 @@
 <div class="timer-item">
 	<div class="timer-item-content">
 		<div class="timer-name-row">
-			<button
-				onclick={toggleIsExpanded}
-				ontouchend={toggleIsExpanded}
-				class="chevron"
-			>
+			<button onclick={toggleIsExpanded} class="chevron">
 				<div>
 					<svg
 						class="chevron {isExpanded ? 'up' : 'down'}"
@@ -193,14 +190,22 @@
 				use:blurOnEnter
 				use:focusOnInit
 			/>
-			<ControlButton
-				onclick={isRunning ? pause : start}
-				symbol={isRunning ? "pause" : "play"}
-				cls={isRunning ? "action" : "default"}
-				margin="0 10px"
-			/>
-			<ControlButton onclick={reset} symbol={"stop"} margin="0 5px 0 0" />
-			<CancelButton onclick={onDelete} margin="0 5px 0 0" />
+			<div class="start-button">
+				<ControlButton
+					onclick={isRunning ? pause : start}
+					symbol={isRunning ? "pause" : "play"}
+					cls={isRunning ? "action" : "default"}
+				/>
+			</div>
+			<div class="stop-button">
+				<ControlButton onclick={reset} symbol={"stop"} />
+			</div>
+			<div class="delete-button">
+				<CancelButton onclick={onDelete} />
+			</div>
+			<div class="drag-handle" use:dragHandle aria-label="drag-handle">
+				<DragHandleIcon />
+			</div>
 		</div>
 	</div>
 	<div>
@@ -230,15 +235,15 @@
 	.timer-item {
 		border: 2px solid black;
 		color: var(--text-primary);
-		font-size: 20px;
+		font-size: var(--font-size-medium);
 		padding: 0 0;
 		margin: 0 0;
-		padding: 1em 0em;
+		padding: 1em 0.25em;
 		margin: 0.4em 0.4em;
 	}
 	.timer-item-content {
 		color: var(--text-primary);
-		font-size: 20px;
+		font-size: var(--font-size-medium);
 		display: flex;
 		justify-content: space-between;
 	}
@@ -252,10 +257,10 @@
 	.timer-name-input {
 		padding: 0 0;
 		margin: 0 0;
-		font-size: 20px;
+		font-size: var(--font-size-medium);
 		border: none;
 		background-color: transparent;
-		width: 50%;
+		width: 90%;
 	}
 	.inner-row {
 		display: flex;
@@ -263,9 +268,14 @@
 	.timer-time {
 		width: 90px;
 		text-align: right;
-		font-size: 20px;
+		font-size: var(--font-size-medium);
 		border: none;
 		background-color: transparent;
+	}
+	@media (max-width: 600px) {
+		.timer-time {
+			width: 70px;
+		}
 	}
 	.notes {
 		padding: 10px 10px 0px 10px;
@@ -276,7 +286,7 @@
 		height: 100px;
 		box-sizing: border-box;
 		resize: vertical;
-		font-size: 16px;
+		font-size: var(--font-size-small);
 		background-color: var(--bg-primary);
 		border-color: var(--bg-secondary);
 	}
@@ -284,8 +294,8 @@
 		align-items: center;
 		justify-content: center;
 		display: flex;
-		width: 28px;
-		height: 40px;
+		width: var(--icon-size-medium);
+		height: var(--icon-size-medium);
 		fill: var(--text-primary);
 		background-color: transparent;
 		border: none;
@@ -297,5 +307,33 @@
 	}
 	.chevron.up {
 		transform: rotate(180deg);
+	}
+	.drag-handle {
+		width: var(--icon-size-medium);
+		height: var(--icon-size-medium);
+		align-items: center;
+		justify-content: center;
+		display: flex;
+		margin: 0;
+	}
+	.start-button {
+		margin: 0 10px 0 5px;
+	}
+	.stop-button {
+		margin: 0 5px 0 0;
+	}
+	.delete-button {
+		margin: 0 0 0 0;
+	}
+	@media (max-width: 600px) {
+		.start-button {
+			margin: 0 5px 0 5px;
+		}
+		.stop-button {
+			margin: 0 0px 0 0;
+		}
+		.delete-button {
+			margin: 0 0 0 0;
+		}
 	}
 </style>

@@ -52,7 +52,6 @@
 			</div>
 		</nav>
 	</div>
-	<!-- <h1 class="title">Time Tracker</h1> -->
 	<div class="theme-button">
 		<button onclick={toggleTheme} class="theme-btn">
 			<div class="icon" in:fade>
@@ -119,36 +118,55 @@
 		--btn-secondary: var(--black);
 		--btn-action: var(--light-gray);
 	}
+
+	:global(:root) {
+		--font-size-small: 16px;
+		--font-size-medium: 20px;
+		--font-size-large: 24px;
+
+		--icon-size-medium: 32px;
+		--icon-size-large: 40px;
+	}
+
+	/* Adjust variables based on screen size */
+	@media (max-width: 600px) {
+		:global(:root) {
+			--font-size-small: 14px;
+			--font-size-medium: 16px;
+			--font-size-large: 20px;
+
+			--icon-size-medium: 28px;
+			--icon-size-large: 36px;
+		}
+	}
+
 	.header {
 		color: var(--text-header);
 		background-color: var(--bg-header);
-		padding: 5px 5px;
+		padding: 5px 0px;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		height: 50px;
 	}
-	.title {
-		text-align: center;
-		font-size: 2em;
-		flex: 1;
-		margin-left: 20px;
-	}
+
 	.theme-button {
 		display: flex;
 		justify-content: flex-end;
 		text-align: right;
 	}
+
 	.theme-btn {
 		padding: 0;
-		height: 45px;
-		width: 45px;
+		height: var(--icon-size-large);
+		width: var(--icon-size-large);
 		border: none;
 		background: var(--bg-header);
 		color: var(--text-header);
 		border-radius: 2rem;
 		margin-right: 10px;
 	}
+
 	@media (hover: hover) {
 		.theme-btn:hover {
 			cursor: pointer;
@@ -162,8 +180,13 @@
 
 	.navbar {
 		display: flex;
-        gap: 1rem;
-        padding: 1rem;
+        padding: 0rem 18px;
+	}
+
+	@media (max-width: 600px) {
+		.navbar {
+			padding: 0rem 10px;
+		}
 	}
 
 	.sections {
@@ -171,12 +194,18 @@
 		gap: 2.0rem;
 	}
 
+	@media (max-width: 600px) {
+		.sections {
+			gap: 1.0rem;
+		}
+	}
+
 	.section {
 		display: inline-block;
         text-decoration: none;
         color: var(--fg-header);
         padding: 0.3rem 0.2rem;
-		font-size: 18px;
+		font-size: var(--font-size-medium);
 	}
 
 	.section.active {

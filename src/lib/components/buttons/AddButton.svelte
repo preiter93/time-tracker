@@ -24,8 +24,7 @@
 		border: none;
 		background: none;
 		width: 150px;
-		height: 40px;
-		font-size: 1.2rem;
+		height: var(--icon-size-medium);
 		color: var(--btn-primary);
 	}
 	@media (hover: hover) {
@@ -41,8 +40,8 @@
 		height: 100%;
 	}
 	.text {
-		font-size: 16px;
-		margin-left: 10px;
+		font-size: var(--font-size-small);
+		margin-left: 8px;
 	}
 	.center {
 		display: flex;

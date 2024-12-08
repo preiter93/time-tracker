@@ -1,18 +1,4 @@
-<script>
-	/**
-	 * @typedef {Object} Props
-	 * @property {string} [size]
-	 */
-
-	/** @type {Props} */
-	let { size = "2.0" } = $props();
-</script>
-
-<svg
-	viewBox="0 0 100 100"
-	xmlns="http://www.w3.org/2000/svg"
-	width="{size}rem"
-	height="{size}rem"
+<svg class="svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"
 	><path
 		d="M68.251,72.84H30.749c-2.258,0-4.089-1.831-4.089-4.089V31.249c0-2.258,1.831-4.089,4.089-4.089h37.502   c2.258,0,4.089,1.831,4.089,4.089v37.502C72.34,71.009,70.509,72.84,68.251,72.84z"
 	/><path
@@ -26,5 +12,15 @@
 	path {
 		fill: currentColor;
 		stroke: none;
+	}
+	.svg {
+		width: 32px;
+		height: 32px;
+	}
+	@media (max-width: 600px) {
+		.svg {
+			width: 26px;
+			height: 26px;
+		}
 	}
 </style>

@@ -136,7 +136,6 @@ export class TimerStore {
 	sortByIds(ids) {
 		let storeItems = fetchTimerItemsFromStore();
 		if (ids.length != storeItems.length) {
-			console.log("sortByIds len mismatch detected")
 			return
 		}
 		let sortedItems = new Array(ids.length)

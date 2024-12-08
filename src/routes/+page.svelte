@@ -4,7 +4,7 @@
 	import { AddButton } from "$lib/components/buttons";
 	import { onDestroy, onMount } from "svelte";
 	import { formatDuration } from "$lib/utils";
-	import { dndzone } from "svelte-dnd-action";
+	import { dragHandleZone } from "svelte-dnd-action";
 	import { flip } from "svelte/animate";
 
 	const flipDurationMs = 100;
@@ -122,17 +122,6 @@
 	}
 
 	/**
-	 * @param {string} id
-	 * Invoked when the item gets expanded
-	 */
-	function toggleExpanded(id) {
-		let newTimers = store.toggleExpanded(id);
-		if (newTimers !== null) {
-			timers = newTimers;
-		}
-	}
-
-	/**
 	 * @type {number} the total time
 	 */
 	let totalTime = $state(0);
@@ -192,11 +181,10 @@
 
 <div
 	class="timer-list"
-	use:dndzone={{
+	use:dragHandleZone={{
 		items: timers,
 		flipDurationMs,
 		dropTargetStyle,
-		dragDisabled: isInputFocused ? true : false,
 	}}
 	onconsider={handleDndConsider}
 	onfinalize={handleDndFinalize}
@@ -219,7 +207,6 @@
 					onChangeName={(name) => updateName(item.id, name)}
 					onChangeDuration={(d) => updateDuration(item.id, d)}
 					onChangeNotes={(notes) => updateNotes(item.id, notes)}
-					onToggleExpanded={() => toggleExpanded(item.id)}
 					bind:isInputFocused
 				/>
 			</div>
@@ -247,6 +234,7 @@
 	}
 	.total-time {
 		margin: 0 10px 0 0;
+		font-size: var(--font-size-small);
 	}
 	.fixed-width {
 		display: inline-block;

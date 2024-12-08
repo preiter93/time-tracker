@@ -10,20 +10,13 @@
 	 * @typedef Props
 	 * @property {any} symbol
 	 * @property {string} [cls="default"]
-	 * @property {string} [margin="0"]
 	 * @property {function():void} onclick
 	 */
 	/** @type {Props} */
-	let { symbol, cls = "default", margin = "0", onclick } = $props();
+	let { symbol, cls = "default", onclick } = $props();
 </script>
 
-<button
-	{onclick}
-	ontouchend={onclick}
-	class={cls}
-	style="margin: {margin};"
-	data-testid={symbol}
->
+<button {onclick} class={cls} data-testid={symbol}>
 	<div class="center">
 		{#if symbol === "play"}
 			<PlayIcon />
@@ -47,8 +40,8 @@
 		background-color: var(--btn-action);
 	}
 	button {
-		width: 40px;
-		height: 40px;
+		width: var(--icon-size-medium);
+		height: var(--icon-size-medium);
 		border: 0.1px solid var(--dark-gray);
 		font-size: 1.4rem;
 		border-radius: 0.2rem;

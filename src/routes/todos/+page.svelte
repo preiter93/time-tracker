@@ -1,9 +1,10 @@
 <script>
 	import { flip } from "svelte/animate";
-	import { dndzone } from "svelte-dnd-action";
+	import { dragHandleZone, dragHandle } from "svelte-dnd-action";
 	import { TodoStore } from "$lib/todos_store.js";
 	import { AddButton, CancelButton } from "$lib/components/buttons";
 	import { blurOnEnter, blurOnEscape } from "$lib/utils";
+	import DragHandleIcon from "$lib/components/icons/DragHandleIcon.svelte";
 
 	const flipDurationMs = 100;
 	const dropTargetStyle = {
@@ -45,12 +46,16 @@
 	let isInputFocused = $state(false);
 
 	/**
+	 * Whether drag is disabled
+	 */
+	let dragDisabled = $state(false);
+
+	/**
 	 * Change the content of a todo
 	 * @param {string} id
 	 * @param {string} content
 	 */
 	function updateContent(id, content) {
-		console.log("update content " + id);
 		let newTodos = store.updateContent(id, content);
 		if (newTodos !== null) {
 			todos = newTodos;
@@ -90,11 +95,11 @@
 
 <div
 	class="todo-list"
-	use:dndzone={{
+	use:dragHandleZone={{
 		items: todos,
 		flipDurationMs,
 		dropTargetStyle,
-		dragDisabled: isInputFocused ? true : false,
+		dragDisabled: dragDisabled,
 	}}
 	onconsider={handleDndConsider}
 	onfinalize={handleDndFinalize}
@@ -115,7 +120,16 @@
 				use:blurOnEscape
 				bind:value={item.content}
 			/>
-			<CancelButton onclick={() => deleteTodo(item.id)} />
+			<div class="actions">
+				<CancelButton onclick={() => deleteTodo(item.id)} />
+				<div
+					class="drag-handle"
+					use:dragHandle
+					aria-label="drag-handle"
+				>
+					<DragHandleIcon />
+				</div>
+			</div>
 		</div>
 	{/each}
 	<div class="todo-add">
@@ -128,20 +142,20 @@
 		display: block;
 	}
 	.todo-item {
-		padding: 1em 0.25em 1em 1em;
+		padding: 1em 0.25em 1em 0.5em;
 		margin: 0.4em 0.4em;
 		border: 2px solid black;
 		color: var(--text-primary);
-		font-size: 20px;
+		font-size: var(--font-size-medium);
 		line-height: 0.2;
 		display: flex;
 		justify-content: space-between;
 	}
 	.todo-input {
-		font-size: 20px;
+		font-size: var(--font-size-medium);
 		background-color: transparent;
 		border: none;
-		width: 50%;
+		width: 90%;
 		min-width: 200px;
 	}
 	.todo-add {
@@ -149,5 +163,16 @@
 		align-items: center;
 		justify-content: space-between;
 		height: 100%;
+	}
+	.actions {
+		display: flex;
+		align-items: center;
+	}
+	.drag-handle {
+		width: var(--icon-size-medium);
+		height: var(--icon-size-medium);
+		align-items: center;
+		justify-content: center;
+		display: flex;
 	}
 </style>

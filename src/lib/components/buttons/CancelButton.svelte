@@ -3,19 +3,13 @@
 
 	/**
 	 * @typedef Props
-	 * @property {string} [margin]
 	 * @property {function():void} onclick
 	 */
 	/** @type {Props} */
-	let { margin = "0", onclick } = $props();
+	let { onclick } = $props();
 </script>
 
-<button
-	{onclick}
-	ontouchend={onclick}
-	class="cancel-button"
-	style="margin: {margin};"
->
+<button {onclick}>
 	<div class="center">
 		<CancelIcon />
 	</div></button
@@ -25,8 +19,8 @@
 	button {
 		border: none;
 		background: none;
-		width: 40px;
-		height: 40px;
+		width: var(--icon-size-medium);
+		height: var(--icon-size-medium);
 	}
 	@media (hover: hover) {
 		button:hover {
