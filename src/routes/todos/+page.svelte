@@ -146,7 +146,7 @@
 	.todo-item {
 		padding: 1em 0.25em;
 		margin: 0.4em 0.4em;
-		border: 2px solid black;
+		border: 2px solid var(--bg-secondary);
 		color: var(--text-primary);
 		font-size: var(--font-size-medium);
 		display: flex;

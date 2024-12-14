@@ -1,10 +1,10 @@
 <script>
-	import { page } from '$app/stores';
+	import { page } from "$app/stores";
 	import { toggleThemeStorage, getInitialTheme } from "$lib/theme.js";
 	import { fade } from "svelte/transition";
 	import { onMount } from "svelte";
 	import { DarkIcon, LightIcon } from "$lib/components/icons";
-	import {base } from '$app/paths';
+	import { base } from "$app/paths";
 
 	let { children } = $props();
 
@@ -32,8 +32,8 @@
 	});
 
 	const sections = [
-		{ name: '⏱  Timers', href: `${base}/` },
-		{ name: '✔ Todos', href: `${base}/todos` }
+		{ name: "⏱  Timers", href: `${base}/` },
+		{ name: "✔ Todos", href: `${base}/todos` },
 	];
 </script>
 
@@ -42,9 +42,9 @@
 		<nav class="navbar">
 			<div class="sections">
 				{#each sections as section}
-					<a 
+					<a
 						href={section.href}
-						class={`section ${$page.url.pathname === section.href ? 'active' : 'inactive'}`}
+						class={`section ${$page.url.pathname === section.href ? "active" : "inactive"}`}
 					>
 						{section.name}
 					</a>
@@ -73,13 +73,10 @@
 
 <style>
 	:root {
-		--light-purple: #913175;
-		--light-gray: #e9e8e8;
-		--gray: #d1d0d0;
-		--dark-gray: #1e293b;
-		--black: #020617;
-		--white: #f1f5f9;
-		--dark-blue: #1e293b;
+		--light-gray: hsl(0, 0%, 92%);
+		--dark-gray: hsl(217, 32%, 17%);
+		--black: hsl(217, 32%, 2%);
+		--white: hsl(0, 0%, 100%);
 	}
 	:global(h1, p, input[type="text"], textarea) {
 		font-family: "Raleway", sans-serif;
@@ -98,23 +95,23 @@
 	}
 
 	:global(.light) {
-		--bg-header: var(--dark-blue);
+		--bg-header: var(--dark-gray);
 		--text-header: var(--white);
 		--bg-primary: var(--white);
 		--bg-secondary: var(--black);
 		--text-primary: var(--black);
 		--btn-primary: var(--black);
 		--btn-secondary: var(--white);
-		--btn-action: var(--dark-blue);
+		--btn-action: var(--dark-gray);
 	}
 
 	:global(.dark) {
 		--bg-header: var(--black);
-		--text-header: var(--gray);
+		--text-header: var(--light-gray);
 		--bg-primary: var(--dark-gray);
-		--bg-secondary: var(--dark);
+		--bg-secondary: var(--black);
 		--text-primary: var(--light-gray);
-		--btn-primary: var(--gray);
+		--btn-primary: var(--light-gray);
 		--btn-secondary: var(--black);
 		--btn-action: var(--light-gray);
 	}
@@ -180,7 +177,7 @@
 
 	.navbar {
 		display: flex;
-        padding: 0rem 18px;
+		padding: 0rem 18px;
 	}
 
 	@media (max-width: 600px) {
@@ -191,20 +188,20 @@
 
 	.sections {
 		display: flex;
-		gap: 2.0rem;
+		gap: 2rem;
 	}
 
 	@media (max-width: 600px) {
 		.sections {
-			gap: 1.0rem;
+			gap: 1rem;
 		}
 	}
 
 	.section {
 		display: inline-block;
-        text-decoration: none;
-        color: var(--fg-header);
-        padding: 0.3rem 0.2rem;
+		text-decoration: none;
+		color: var(--fg-header);
+		padding: 0.3rem 0.2rem;
 		font-size: var(--font-size-medium);
 	}
 
